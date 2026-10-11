@@ -36,6 +36,7 @@ import java.util.function.Supplier;
 public final class NpcBodies {
 
     private static final double HORSE_HEALTH = 30;
+    private static final double HORSE_SPEED = 0.3;
     private static final float PATH_RANGE = 48f;
     private static final double ARCHER_RANGE = 18;
     private static final double ARCHER_KEEP_DISTANCE = 9;
@@ -71,11 +72,18 @@ public final class NpcBodies {
         NPC npc = registry.createNPC(EntityType.HORSE, "");
         common(npc, false);
         HorseModifiers horse = npc.getOrAddTrait(HorseModifiers.class);
-        horse.setSaddle(new ItemStack(Material.SADDLE));
+        // Eyer yok: eyerli atta oyuncu tipindeki binici atin kontrolunu alir ve NPC tus basmadigi icin
+        // at yerinde sayar. Eyersiz atin yolunu Citizens'in yol bulucusu yurutur.
+        horse.setSaddle(null);
         horse.setArmor(armor);
         horse.setColor(color);
         horse.setStyle(Horse.Style.NONE);
-        return spawn(npc, at, HORSE_HEALTH);
+        Optional<NPC> spawned = spawn(npc, at, HORSE_HEALTH);
+        // Vanilya at hizi rastgeledir; suvari kosan oyuncuya yetisebilsin diye sabitlenir.
+        spawned.map(NPC::getEntity).filter(LivingEntity.class::isInstance).map(LivingEntity.class::cast)
+                .map(horseEntity -> horseEntity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED))
+                .ifPresent(speed -> speed.setBaseValue(HORSE_SPEED));
+        return spawned;
     }
 
     public void mount(NPC rider, NPC horse) {
@@ -114,13 +122,13 @@ public final class NpcBodies {
                 });
     }
 
-    /** Askerler takilinca isinlanir; haydutlar dolasirken takilirsa beklemekte sakinca yok. */
+    /** Takilan NPC hedefine isinlanir (dar gecit, agac, cukur); yerinde donup kalmasindan iyidir. */
     public static void followerDefaults(NPC walker) {
         walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(TeleportStuckAction.INSTANCE);
     }
 
     public static void roamerDefaults(NPC walker) {
-        walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(null);
+        walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(TeleportStuckAction.INSTANCE);
     }
 
     public static void shoot(LivingEntity archer, LivingEntity target, double arrowDamage) {
@@ -151,6 +159,8 @@ public final class NpcBodies {
     private static void common(NPC npc, boolean nameplate) {
         npc.setProtected(false);
         npc.data().set(NPC.Metadata.NAMEPLATE_VISIBLE, nameplate);
+        // Renkli ad hologramla gosterilir; oyuncu profil adina renk kodu girmesin (Adventure uyarisi).
+        npc.data().set(NPC.Metadata.ALWAYS_USE_NAME_HOLOGRAM, true);
         npc.data().set(NPC.Metadata.DROPS_ITEMS, false);
         npc.data().set(NPC.Metadata.RESPAWN_DELAY, -1);
         npc.data().set(NPC.Metadata.COLLIDABLE, false);

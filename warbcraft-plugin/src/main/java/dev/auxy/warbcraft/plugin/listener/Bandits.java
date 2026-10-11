@@ -15,6 +15,7 @@ import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -97,7 +98,7 @@ public final class Bandits {
         }
         double angle = random.nextDouble() * Math.PI * 2;
         Location at = around.clone().add(Math.cos(angle) * 8, 0, Math.sin(angle) * 8);
-        Block ground = around.getWorld().getHighestBlockAt(at);
+        Block ground = ground(at);
         Gang gang = spawnGang(kind, ground.getLocation().add(0.5, 1, 0.5));
         return gang == null ? 0 : gang.members.size();
     }
@@ -111,7 +112,11 @@ public final class Bandits {
                 String doing = gang.target == null ? "dolaşıyor"
                         : "saldırıyor: " + (gang.target instanceof Player p && !NpcTags.isAnyNpc(p) ? p.getName()
                         : tags.troop(gang.target).orElse(gang.target.getType().name().toLowerCase(Locale.ROOT)));
-                lines.add(Msg.esc(gang.kind.name()) + " · " + gang.members.size() + " kişi · "
+                long riders = gang.members.stream().filter(m -> m.mount != null).count();
+                long mounted = gang.members.stream().filter(m -> m.mount != null && m.npc.getEntity() != null
+                        && m.npc.getEntity().getVehicle() != null).count();
+                lines.add(Msg.esc(gang.kind.name()) + " · " + gang.members.size() + " kişi"
+                        + (riders > 0 ? " (atlı " + mounted + "/" + riders + " atında)" : "") + " · "
                         + (int) at.distance(around) + " blok · " + Msg.esc(doing));
             }
         }
@@ -181,7 +186,7 @@ public final class Bandits {
             if (!world.isChunkLoaded(x >> 4, z >> 4)) {
                 continue;
             }
-            Block ground = world.getHighestBlockAt(x, z);
+            Block ground = world.getHighestBlockAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES);
             if (ground.isLiquid() || !ground.getType().isSolid() || Math.abs(ground.getY() - center.getY()) > 24) {
                 continue;
             }
@@ -259,6 +264,11 @@ public final class Bandits {
         return game.data().bandits();
     }
 
+    /** Agac yapraklarini saymayan zemin: haydut agac tepesinde dogup orada kalmasin. */
+    private static Block ground(Location at) {
+        return at.getWorld().getHighestBlockAt(at.getBlockX(), at.getBlockZ(), HeightMap.MOTION_BLOCKING_NO_LEAVES);
+    }
+
     private static String biomeKey(Block block) {
         return block.getBiome().getKey().getKey();
     }
@@ -311,7 +321,7 @@ public final class Bandits {
         private void wander() {
             double angle = random.nextDouble() * Math.PI * 2;
             double distance = random.nextDouble() * WANDER_RADIUS;
-            Block ground = home.getWorld().getHighestBlockAt(home.clone().add(Math.cos(angle) * distance, 0, Math.sin(angle) * distance));
+            Block ground = ground(home.clone().add(Math.cos(angle) * distance, 0, Math.sin(angle) * distance));
             Location point = ground.getLocation().add(0.5, 1, 0.5);
             for (Member member : members) {
                 member.walker().getNavigator().setTarget(point.clone().add(random.nextDouble() * 3 - 1.5, 0, random.nextDouble() * 3 - 1.5));
