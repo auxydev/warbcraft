@@ -1,0 +1,37 @@
+# Warbcraft ana ayarlar. Değişiklikler sunucu yeniden başlatılınca uygulanır.
+
+sezon:
+  # Sezon numarasını artırmak YENİ SEZON demektir: önceki sezonun durumu ve oyuncu verisi
+  # plugins/Warbcraft/arsiv/sezon-N/ altına taşınır, herkes sıfırdan başlar.
+  numara: 1
+  baslangic: "2026-11-06T20:00"      # yerel saat
+  saat-dilimi: Europe/Istanbul
+  hazirlik-gun: 7                    # savaş yok: ticaret, asker toplama, görevler, klan kurma
+  sefer-gun: 42                      # savaşlar serbest
+  son-gun: 7                         # son muharebeler
+  kusatma-ihbar-saat: 24             # kuşatma ilanından en az bu kadar sonra başlayabilir
+  # Kuşatmalar yalnızca bu pencerelerde yapılabilir (çevrimdışı oyuncunun kalesi gece düşmez).
+  savas-pencereleri:
+    - gunler: [cuma, cumartesi, pazar]
+      baslangic: "20:00"
+      bitis: "23:00"
+    - gunler: [carsamba]
+      baslangic: "21:00"
+      bitis: "23:00"
+
+# NPC krallıkların gücü bilerek sınırlıdır: dünyayı canlı tutar, görev verir; oyunu oyuncular domine eder.
+npc-denge:
+  lord-parti-carpani: 0.6            # NPC lord ordusu = aynı kademedeki oyuncu sınırının %60'ı
+  lord-en-yuksek-kademe: 4           # NPC lordlar 5-6. kademe seçkin asker taşımaz
+  garnizon-carpani: 0.7              # NPC garnizonları da zayıflatılmış
+  oyuncuya-savas-bekleme-gun: 7      # bir NPC krallık oyunculara en fazla haftada bir savaş ilan eder
+  oyuncularla-en-fazla-savas: 1      # ve aynı anda en fazla bir oyuncu krallığıyla savaşır
+
+oyun:
+  gun-uzunlugu-dakika: 60            # 1 sefer günü = 60 gerçek dakika (maaş, üretim, görev yenileme)
+  asker-toplama-ucreti: 30
+  baslangic-dinar: 500
+  haydut-odulu: 15
+  klan-kurma-ucreti: 2000
+  krallik-icin-klan-kademesi: 2
+  vasal-icin-iliski: 10              # NPC kralın sancağı altına girmek için gereken ilişki

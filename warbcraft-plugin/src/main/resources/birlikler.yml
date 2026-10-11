@@ -1,0 +1,60 @@
+# Birlik ağaçları. Her terfi tam bir kademe yukarı ve aynı kültür içinde olmalı.
+# sinif: PIYADE | OKCU | SUVARI | ATLI_OKCU
+# guc: otomatik savaş hesabındaki güç · maas: günlük dinar · terfi-xp: asker başına terfi deneyimi
+
+kulturler:
+  valdor: {ad: Valdor}        # batılı şövalyeler ve arbaletçiler
+  nordhem: {ad: Nordhem}      # kuzeyli kalkan duvarı ve baltacılar
+  aurelya: {ad: Aurelya}      # imparatorluk lejyonları ve katafraktlar
+  karahan: {ad: Karahan}      # bozkır atlı okçuları
+  haydut: {ad: Haydut}
+
+birlikler:
+  # ---------------- VALDOR ----------------
+  valdor_koylu:            {ad: Valdor Köylüsü,       kultur: valdor, kademe: 1, sinif: PIYADE, guc: 10, maas: 1,  terfi-xp: 25,  terfi: [valdor_milis]}
+  valdor_milis:            {ad: Valdor Milisi,        kultur: valdor, kademe: 2, sinif: PIYADE, guc: 16, maas: 2,  terfi-xp: 50,  terfi: [valdor_mizrakci, valdor_arbaletci]}
+  valdor_mizrakci:         {ad: Valdor Mızrakçısı,    kultur: valdor, kademe: 3, sinif: PIYADE, guc: 24, maas: 4,  terfi-xp: 100, terfi: [valdor_cavus, valdor_atli_cavus]}
+  valdor_arbaletci:        {ad: Valdor Arbaletçisi,   kultur: valdor, kademe: 3, sinif: OKCU,   guc: 22, maas: 4,  terfi-xp: 100, terfi: [valdor_keskin_arbaletci]}
+  valdor_cavus:            {ad: Valdor Çavuşu,        kultur: valdor, kademe: 4, sinif: PIYADE, guc: 34, maas: 6,  terfi-xp: 200, terfi: [valdor_muhafiz]}
+  valdor_atli_cavus:       {ad: Atlı Çavuş,           kultur: valdor, kademe: 4, sinif: SUVARI, guc: 36, maas: 7,  terfi-xp: 250, terfi: [valdor_sovalye]}
+  valdor_keskin_arbaletci: {ad: Keskin Arbaletçi,     kultur: valdor, kademe: 4, sinif: OKCU,   guc: 32, maas: 6}
+  valdor_muhafiz:          {ad: Valdor Muhafızı,      kultur: valdor, kademe: 5, sinif: PIYADE, guc: 46, maas: 9}
+  valdor_sovalye:          {ad: Valdor Şövalyesi,     kultur: valdor, kademe: 5, sinif: SUVARI, guc: 50, maas: 10, terfi-xp: 500, terfi: [valdor_sancakli]}
+  valdor_sancakli:         {ad: Sancaklı Şövalye,     kultur: valdor, kademe: 6, sinif: SUVARI, guc: 66, maas: 15}
+
+  # ---------------- NORDHEM ----------------
+  nordhem_koylu:           {ad: Nordhem Köylüsü,      kultur: nordhem, kademe: 1, sinif: PIYADE, guc: 10, maas: 1,  terfi-xp: 25,  terfi: [nordhem_kalkanci]}
+  nordhem_kalkanci:        {ad: Kalkancı,             kultur: nordhem, kademe: 2, sinif: PIYADE, guc: 16, maas: 2,  terfi-xp: 50,  terfi: [nordhem_baltaci, nordhem_okcu]}
+  nordhem_baltaci:         {ad: Baltacı,              kultur: nordhem, kademe: 3, sinif: PIYADE, guc: 25, maas: 4,  terfi-xp: 100, terfi: [nordhem_kalkan_duvari]}
+  nordhem_okcu:            {ad: Nordhem Okçusu,       kultur: nordhem, kademe: 3, sinif: OKCU,   guc: 22, maas: 4,  terfi-xp: 100, terfi: [nordhem_av_okcusu]}
+  nordhem_kalkan_duvari:   {ad: Kalkan Duvarı Savaşçısı, kultur: nordhem, kademe: 4, sinif: PIYADE, guc: 35, maas: 6, terfi-xp: 250, terfi: [nordhem_huskarl]}
+  nordhem_av_okcusu:       {ad: Av Okçusu,            kultur: nordhem, kademe: 4, sinif: OKCU,   guc: 32, maas: 6}
+  nordhem_huskarl:         {ad: Hüskarl,              kultur: nordhem, kademe: 5, sinif: PIYADE, guc: 48, maas: 9,  terfi-xp: 500, terfi: [nordhem_drujina]}
+  nordhem_drujina:         {ad: Drujina Süvarisi,     kultur: nordhem, kademe: 6, sinif: SUVARI, guc: 64, maas: 14}
+
+  # ---------------- AURELYA ----------------
+  aurelya_acemi:           {ad: Aurelya Acemisi,      kultur: aurelya, kademe: 1, sinif: PIYADE, guc: 10, maas: 1,  terfi-xp: 25,  terfi: [aurelya_aday]}
+  aurelya_aday:            {ad: Lejyoner Adayı,       kultur: aurelya, kademe: 2, sinif: PIYADE, guc: 16, maas: 2,  terfi-xp: 50,  terfi: [aurelya_lejyoner, aurelya_okcu]}
+  aurelya_lejyoner:        {ad: Lejyoner,             kultur: aurelya, kademe: 3, sinif: PIYADE, guc: 24, maas: 4,  terfi-xp: 100, terfi: [aurelya_agir_piyade, aurelya_ekdromos]}
+  aurelya_okcu:            {ad: Aurelya Okçusu,       kultur: aurelya, kademe: 3, sinif: OKCU,   guc: 23, maas: 4,  terfi-xp: 100, terfi: [aurelya_palatin_okcu]}
+  aurelya_agir_piyade:     {ad: Ağır Lejyoner,        kultur: aurelya, kademe: 4, sinif: PIYADE, guc: 35, maas: 6,  terfi-xp: 250, terfi: [aurelya_muhafiz]}
+  aurelya_ekdromos:        {ad: Ekdromos Süvarisi,    kultur: aurelya, kademe: 4, sinif: SUVARI, guc: 36, maas: 7,  terfi-xp: 250, terfi: [aurelya_katafrakt]}
+  aurelya_palatin_okcu:    {ad: Saray Okçusu,         kultur: aurelya, kademe: 4, sinif: OKCU,   guc: 33, maas: 6}
+  aurelya_muhafiz:         {ad: İmparatorluk Muhafızı, kultur: aurelya, kademe: 5, sinif: PIYADE, guc: 46, maas: 9}
+  aurelya_katafrakt:       {ad: Katafrakt,            kultur: aurelya, kademe: 5, sinif: SUVARI, guc: 52, maas: 11, terfi-xp: 500, terfi: [aurelya_elit_katafrakt]}
+  aurelya_elit_katafrakt:  {ad: Seçkin Katafrakt,     kultur: aurelya, kademe: 6, sinif: SUVARI, guc: 68, maas: 16}
+
+  # ---------------- KARAHAN ----------------
+  karahan_gocebe:          {ad: Göçebe,               kultur: karahan, kademe: 1, sinif: PIYADE,    guc: 10, maas: 1,  terfi-xp: 25,  terfi: [karahan_atli]}
+  karahan_atli:            {ad: Bozkır Atlısı,        kultur: karahan, kademe: 2, sinif: SUVARI,    guc: 17, maas: 3,  terfi-xp: 50,  terfi: [karahan_atli_okcu, karahan_mizrakli]}
+  karahan_atli_okcu:       {ad: Atlı Okçu,            kultur: karahan, kademe: 3, sinif: ATLI_OKCU, guc: 24, maas: 5,  terfi-xp: 120, terfi: [karahan_usta_okcu]}
+  karahan_mizrakli:        {ad: Mızraklı Atlı,        kultur: karahan, kademe: 3, sinif: SUVARI,    guc: 25, maas: 5,  terfi-xp: 120, terfi: [karahan_bey_muhafizi]}
+  karahan_usta_okcu:       {ad: Usta Atlı Okçu,       kultur: karahan, kademe: 4, sinif: ATLI_OKCU, guc: 34, maas: 7,  terfi-xp: 300, terfi: [karahan_kesik]}
+  karahan_bey_muhafizi:    {ad: Bey Muhafızı,         kultur: karahan, kademe: 4, sinif: SUVARI,    guc: 36, maas: 7}
+  karahan_kesik:           {ad: Keşik,                kultur: karahan, kademe: 5, sinif: ATLI_OKCU, guc: 48, maas: 10}
+
+  # ---------------- HAYDUTLAR (toplanamaz, terfi etmez) ----------------
+  haydut_yagmaci:          {ad: Yağmacı,              kultur: haydut, kademe: 1, sinif: PIYADE,    guc: 7,  maas: 0}
+  haydut_orman:            {ad: Orman Eşkıyası,       kultur: haydut, kademe: 2, sinif: OKCU,      guc: 14, maas: 0}
+  haydut_bozkir:           {ad: Bozkır Akıncısı,      kultur: haydut, kademe: 2, sinif: ATLI_OKCU, guc: 15, maas: 0}
+  haydut_deniz:            {ad: Deniz Akıncısı,       kultur: haydut, kademe: 3, sinif: PIYADE,    guc: 22, maas: 0}

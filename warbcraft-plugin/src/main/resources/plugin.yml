@@ -1,0 +1,55 @@
+name: Warbcraft
+version: '${version}'
+main: dev.auxy.warbcraft.plugin.WarbcraftPlugin
+api-version: '1.21'
+description: Mount & Blade tarzı ortaçağ sezonluk sunucu sistemi
+authors: [auxydev]
+website: https://github.com/auxydev/warbcraft
+softdepend: [ViaVersion]
+
+commands:
+  parti:
+    description: Partini (ordunu) gösterir, asker terfi ettirir veya terhis eder
+    usage: /parti [terfi <birlik> <hedef> [adet] | terhis <birlik> <adet>]
+    aliases: [ordu]
+    permission: warbcraft.oyuncu
+  topla:
+    description: Bulunduğun köy ya da şehirden gönüllü asker toplar
+    usage: /topla [adet]
+    permission: warbcraft.oyuncu
+  pazar:
+    description: Şehir pazarında alım-satım
+    usage: /pazar [al|sat <mal> <adet>]
+    permission: warbcraft.oyuncu
+  gorev:
+    description: NPC kralların görevleri
+    usage: /gorev [liste|pano|al <no>|teslim <no>|birak <no>]
+    permission: warbcraft.oyuncu
+  klan:
+    description: Klan kurma ve yönetimi
+    usage: /klan [bilgi|kur <ad>|davet <oyuncu>|katil <klan>|ayril]
+    permission: warbcraft.oyuncu
+  krallik:
+    description: Krallıklar, vasallık ve diplomasi
+    usage: /krallik [liste|bilgi|kur|katil|davet|ayril|savas|baris]
+    permission: warbcraft.oyuncu
+  sezon:
+    description: Sezon durumu, savaş penceresi ve sıralama
+    usage: /sezon
+    permission: warbcraft.oyuncu
+  dinar:
+    description: Kesendeki dinar; başka oyuncuya gönderme
+    usage: /dinar [gonder <oyuncu> <miktar>]
+    permission: warbcraft.oyuncu
+  wbadmin:
+    description: Warbcraft yönetimi
+    usage: /wbadmin <gun|kaydet|dinar|un|konum|haydut|savas|baris>
+    permission: warbcraft.admin
+
+permissions:
+  warbcraft.oyuncu:
+    description: Oyuncu komutları
+    default: true
+  warbcraft.admin:
+    description: Yönetici komutları
+    default: op

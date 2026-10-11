@@ -1,0 +1,21 @@
+# Warbcraft - yeni oyuncu karşılama ve /rehber komutu.
+# Skript, sık değişen içerik (duyurular, rehberler, küçük etkinlikler) içindir.
+# Oyun kuralları (ordu, ekonomi, savaş) Warbcraft eklentisindedir; buradan komutlarla çağrılır.
+
+on first join:
+    wait 3 seconds
+    send "&6&lWarbcraft'a hoş geldin, %player%!" to player
+    send "&7Dört krallık bu toprakları paylaşamıyor. Kılıcını kime satacağın sana kalmış." to player
+    send "&7Başlamak için &f/rehber &7yaz." to player
+
+command /rehber:
+    description: Warbcraft başlangıç rehberi
+    trigger:
+        send "&6&l--- Warbcraft Rehberi ---" to player
+        send "&e1. &7Bir köy ya da şehre git, &f/topla &7ile gönüllü topla." to player
+        send "&e2. &7Haydutları avla, askerlerin deneyim kazansın: &f/parti terfi" to player
+        send "&e3. &7Bir başkentte kralın görevlerine bak: &f/gorev pano" to player
+        send "&e4. &7Şehirler arası fiyat farkından kazan: &f/pazar" to player
+        send "&e5. &7Ün kazan, klanını kur: &f/klan kur <ad>" to player
+        send "&e6. &7Bir krala bağlan (&f/krallik katil&7) ya da kendi krallığını kur." to player
+        send "&7Sezon ve savaş saatleri: &f/sezon" to player

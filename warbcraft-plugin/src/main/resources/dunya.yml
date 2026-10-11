@@ -1,0 +1,77 @@
+# Başlangıç dünyası: NPC krallıklar, klanlar, yerleşimler ve ticaret malları.
+# Konumlar örnektir; haritayı kurduktan sonra yerleşimin ortasında durup
+#   /wbadmin konum <yerlesim> [yaricap]
+# yazın, bu dosya otomatik güncellenir.
+
+mallar:
+  tahil:   {ad: Tahıl,   fiyat: 10, esya: WHEAT}
+  et:      {ad: Et,      fiyat: 18, esya: BEEF}
+  yun:     {ad: Yün,     fiyat: 15, esya: WHITE_WOOL}
+  deri:    {ad: Deri,    fiyat: 25, esya: LEATHER}
+  kereste: {ad: Kereste, fiyat: 8,  esya: OAK_LOG}
+  demir:   {ad: Demir,   fiyat: 60, esya: IRON_INGOT}
+  bal:     {ad: Bal,     fiyat: 30, esya: HONEY_BOTTLE}
+
+kralliklar:
+  valdor:
+    ad: Valdor Krallığı
+    kultur: valdor
+    kral: {id: kral_aldric, ad: Kral Aldric, makam: valdheim}
+  nordhem:
+    ad: Nordhem Krallığı
+    kultur: nordhem
+    kral: {id: kral_ragnvald, ad: Kral Ragnvald, makam: isfjord}
+  aurelya:
+    ad: Aurelya İmparatorluğu
+    kultur: aurelya
+    kral: {id: imparator_kassian, ad: İmparator Kassian, makam: aurelion}
+  karahan:
+    ad: Karahan Hanlığı
+    kultur: karahan
+    kral: {id: han_kutluay, ad: Han Kutluay, makam: karakum}
+
+# un: klan kademesini belirler (50/150/350/900/1600/3000). NPC lord ordusu kademeyle büyür
+# ama npc-denge ayarlarıyla oyunculardan hep küçük kalır.
+klanlar:
+  ev_aldric:     {ad: Aldric Hanedanı,  lider: kral_aldric,        krallik: valdor,  un: 1600}
+  ev_merov:      {ad: Merov Ailesi,     lider: lord_merov,         krallik: valdor,  un: 900}
+  ev_dalmar:     {ad: Dalmar Ailesi,    lider: lord_dalmar,        krallik: valdor,  un: 350}
+  ev_ragnvald:   {ad: Ragnvald Soyu,    lider: kral_ragnvald,      krallik: nordhem, un: 1600}
+  ev_ulfgar:     {ad: Ulfgar Soyu,      lider: lord_ulfgar,        krallik: nordhem, un: 900}
+  ev_sigrun:     {ad: Sigrun Soyu,      lider: lord_sigrun,        krallik: nordhem, un: 350}
+  ev_kassian:    {ad: Kassian Hanedanı, lider: imparator_kassian,  krallik: aurelya, un: 1600}
+  ev_varro:      {ad: Varro Ailesi,     lider: lord_varro,         krallik: aurelya, un: 900}
+  ev_lucan:      {ad: Lucan Ailesi,     lider: lord_lucan,         krallik: aurelya, un: 350}
+  ev_kutluay:    {ad: Kutluay Oğulları, lider: han_kutluay,        krallik: karahan, un: 1600}
+  ev_alpagu:     {ad: Alpagu Oğulları,  lider: bey_alpagu,         krallik: karahan, un: 900}
+  ev_tarkan:     {ad: Tarkan Oğulları,  lider: bey_tarkan,         krallik: karahan, un: 350}
+
+# tur: SEHIR (pazar, taverna, görevler) | KALE | KOY (bir şehre/kaleye bağlı, mal üretir)
+yerlesimler:
+  # ---- Valdor (batı) ----
+  valdheim:      {ad: Valdheim,        tur: SEHIR, kultur: valdor,  sahip: ev_aldric,  refah: 6000, garnizon: 120, konum: {dunya: world, x: -1500, y: 70, z: 0,     yaricap: 80}}
+  kartalkaya:    {ad: Kartalkaya,      tur: KALE,  kultur: valdor,  sahip: ev_merov,   refah: 2500, garnizon: 80,  konum: {dunya: world, x: -1900, y: 70, z: -400,  yaricap: 50}}
+  ekinova:       {ad: Ekinova,         tur: KOY,   kultur: valdor,  sahip: ev_aldric,  bagli: valdheim,   uretim: tahil, refah: 900, konum: {dunya: world, x: -1300, y: 70, z: 250, yaricap: 40}}
+  koyunyurdu:    {ad: Koyunyurdu,      tur: KOY,   kultur: valdor,  sahip: ev_dalmar,  bagli: valdheim,   uretim: yun,   refah: 700, konum: {dunya: world, x: -1700, y: 70, z: 300, yaricap: 40}}
+  demirocak:     {ad: Demirocak,       tur: KOY,   kultur: valdor,  sahip: ev_merov,   bagli: kartalkaya, uretim: demir, refah: 600, konum: {dunya: world, x: -2100, y: 70, z: -600, yaricap: 40}}
+
+  # ---- Nordhem (kuzey) ----
+  isfjord:       {ad: Isfjord,         tur: SEHIR, kultur: nordhem, sahip: ev_ragnvald, refah: 5500, garnizon: 120, konum: {dunya: world, x: 0,    y: 70, z: -1500, yaricap: 80}}
+  kurtkaya:      {ad: Kurtkaya,        tur: KALE,  kultur: nordhem, sahip: ev_ulfgar,   refah: 2200, garnizon: 80,  konum: {dunya: world, x: 400,  y: 70, z: -1900, yaricap: 50}}
+  camkoy:        {ad: Çamköy,          tur: KOY,   kultur: nordhem, sahip: ev_ragnvald, bagli: isfjord,  uretim: kereste, refah: 800, konum: {dunya: world, x: -250, y: 70, z: -1300, yaricap: 40}}
+  avcilar:       {ad: Avcılar,         tur: KOY,   kultur: nordhem, sahip: ev_sigrun,   bagli: isfjord,  uretim: deri,    refah: 700, konum: {dunya: world, x: 250,  y: 70, z: -1250, yaricap: 40}}
+  balkovan:      {ad: Balkovan,        tur: KOY,   kultur: nordhem, sahip: ev_ulfgar,   bagli: kurtkaya, uretim: bal,     refah: 600, konum: {dunya: world, x: 600,  y: 70, z: -2100, yaricap: 40}}
+
+  # ---- Aurelya (doğu) ----
+  aurelion:      {ad: Aurelion,        tur: SEHIR, kultur: aurelya, sahip: ev_kassian, refah: 7000, garnizon: 140, konum: {dunya: world, x: 1500, y: 70, z: 0,    yaricap: 90}}
+  lejyonkale:    {ad: Lejyon Kalesi,   tur: KALE,  kultur: aurelya, sahip: ev_varro,   refah: 2800, garnizon: 90,  konum: {dunya: world, x: 1900, y: 70, z: 400,  yaricap: 50}}
+  bagevler:      {ad: Bağevler,        tur: KOY,   kultur: aurelya, sahip: ev_kassian, bagli: aurelion,   uretim: bal,   refah: 900, konum: {dunya: world, x: 1300, y: 70, z: -250, yaricap: 40}}
+  bugdaylik:     {ad: Buğdaylık,       tur: KOY,   kultur: aurelya, sahip: ev_lucan,   bagli: aurelion,   uretim: tahil, refah: 800, konum: {dunya: world, x: 1700, y: 70, z: -300, yaricap: 40}}
+  madenli:       {ad: Madenli,         tur: KOY,   kultur: aurelya, sahip: ev_varro,   bagli: lejyonkale, uretim: demir, refah: 600, konum: {dunya: world, x: 2100, y: 70, z: 600,  yaricap: 40}}
+
+  # ---- Karahan (güney) ----
+  karakum:       {ad: Karakum,         tur: SEHIR, kultur: karahan, sahip: ev_kutluay, refah: 5000, garnizon: 110, konum: {dunya: world, x: 0,    y: 70, z: 1500, yaricap: 80}}
+  bozkurtkale:   {ad: Bozkurt Kalesi,  tur: KALE,  kultur: karahan, sahip: ev_alpagu,  refah: 2000, garnizon: 70,  konum: {dunya: world, x: -400, y: 70, z: 1900, yaricap: 50}}
+  sulakyurt:     {ad: Sulakyurt,       tur: KOY,   kultur: karahan, sahip: ev_kutluay, bagli: karakum,     uretim: et,  refah: 800, konum: {dunya: world, x: 250,  y: 70, z: 1300, yaricap: 40}}
+  obakoy:        {ad: Obaköy,          tur: KOY,   kultur: karahan, sahip: ev_tarkan,  bagli: karakum,     uretim: yun, refah: 700, konum: {dunya: world, x: -250, y: 70, z: 1250, yaricap: 40}}
+  yilkiova:      {ad: Yılkıova,        tur: KOY,   kultur: karahan, sahip: ev_alpagu,  bagli: bozkurtkale, uretim: deri, refah: 600, konum: {dunya: world, x: -600, y: 70, z: 2100, yaricap: 40}}
