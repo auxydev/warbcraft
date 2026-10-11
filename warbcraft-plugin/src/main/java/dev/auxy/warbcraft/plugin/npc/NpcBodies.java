@@ -4,7 +4,7 @@ import dev.auxy.warbcraft.plugin.data.Skin;
 import dev.auxy.warbcraft.plugin.field.SoldierKit;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.NavigatorParameters;
-import net.citizensnpcs.api.ai.TeleportStuckAction;
+import net.citizensnpcs.api.ai.StuckAction;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.trait.Equipment;
@@ -122,13 +122,18 @@ public final class NpcBodies {
                 });
     }
 
-    /** Takilan NPC hedefine isinlanir (dar gecit, agac, cukur); yerinde donup kalmasindan iyidir. */
+    /**
+     * Citizens'in "takildi" eylemi kapali: yol yeniden hesaplanirken bile isinlayip NPC'yi
+     * sicratiyordu. Gercekten sikisan NPC'yi Retinue/Bandits kendisi, kati zemine tasir.
+     */
+    private static final StuckAction NO_TELEPORT = (npc, navigator) -> false;
+
     public static void followerDefaults(NPC walker) {
-        walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(TeleportStuckAction.INSTANCE);
+        walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(NO_TELEPORT);
     }
 
     public static void roamerDefaults(NPC walker) {
-        walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(TeleportStuckAction.INSTANCE);
+        walker.getNavigator().getDefaultParameters().range(PATH_RANGE).stuckAction(NO_TELEPORT);
     }
 
     public static void shoot(LivingEntity archer, LivingEntity target, double arrowDamage) {

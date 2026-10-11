@@ -56,12 +56,16 @@ public final class Retinue {
     private static final long TICK_PERIOD = 5L;
     private static final int SYNC_EVERY = 4;
     private static final int SPAWN_PER_SYNC = 4;
-    private static final double REGROUP_DISTANCE = 40;
+    /** Bundan uzaktaki asker kaybolmus sayilir ve yanina tasinir (orn. oyuncu isinlandi). */
+    private static final double REGROUP_DISTANCE = 64;
+    /** Hedef nokta bu kadar kaymadikca yeni yol hesaplanmaz; surekli yeniden yol dur-kalk yaptiriyordu. */
+    private static final double REPATH_DISTANCE = 3;
     private static final double SLOT_TOLERANCE = 1.5;
     private static final double TARGET_LEASH = 12;
     private static final long THREAT_MILLIS = 10_000;
-    private static final double STUCK_DISTANCE = 12;
-    private static final long STUCK_MILLIS = 4_000;
+    private static final double STUCK_DISTANCE = 10;
+    private static final int[] GROUND_SEARCH = {0, -1, 1, -2, 2, -3, 3, -4, -5, -6, -7, -8, -10, -12};
+    private static final long STUCK_MILLIS = 6_000;
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
     private final Plugin plugin;
@@ -364,12 +368,11 @@ public final class Retinue {
                 continue;
             }
             FieldFormation.Slot slot = band.formation.slot(index++);
-            Location point = slotLocation(anchor, heading, slot);
+            Location slotPoint = slotLocation(anchor, heading, slot);
+            Location point = ground(slotPoint).orElse(slotPoint);
             if (!body.getWorld().equals(anchor.getWorld())
                     || body.getLocation().distanceSquared(anchor) > REGROUP_DISTANCE * REGROUP_DISTANCE) {
-                walker.getNavigator().cancelNavigation();
-                walker.teleport(safe(point, anchor), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                soldier.marchTarget = null;
+                relocate(soldier, walker, point, anchor);
                 continue;
             }
             Navigator navigator = walker.getNavigator();
@@ -434,9 +437,7 @@ public final class Retinue {
         Navigator navigator = walker.getNavigator();
         if (stuck(soldier, at, distance)) {
             // Yol bulunamadi (magara, dar gecit): yerinde saymak yerine yerine gelsin.
-            navigator.cancelNavigation();
-            walker.teleport(safe(point, anchor), PlayerTeleportEvent.TeleportCause.PLUGIN);
-            soldier.marchTarget = null;
+            relocate(soldier, walker, point, anchor);
             return;
         }
         if (distance < SLOT_TOLERANCE) {
@@ -452,15 +453,26 @@ public final class Retinue {
             return;
         }
         soldier.facing = false;
-        // Ayni noktaya her tikte yeni yol hesaplanmasin; yer 1 bloktan fazla kaydiysa yenilenir.
         if (soldier.marchTarget != null && navigator.isNavigating()
                 && soldier.marchTarget.getWorld().equals(point.getWorld())
-                && soldier.marchTarget.distanceSquared(point) < 1.0) {
+                && soldier.marchTarget.distanceSquared(point) < REPATH_DISTANCE * REPATH_DISTANCE) {
             return;
         }
         navigator.setTarget(point);
         navigator.getLocalParameters().distanceMargin(0.8).speedModifier(distance > 8 ? 1.45f : 1.1f);
         soldier.marchTarget = point;
+    }
+
+    /** Isinlanma yalnizca kati zemine; uygun zemin yoksa asker yurumeye devam eder. */
+    private static void relocate(Soldier soldier, NPC walker, Location point, Location anchor) {
+        Optional<Location> ground = ground(point).or(() -> ground(anchor));
+        if (ground.isEmpty()) {
+            return;
+        }
+        walker.getNavigator().cancelNavigation();
+        walker.teleport(ground.get(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+        soldier.marchTarget = null;
+        soldier.progressAt = null;
     }
 
     /** Yerinden uzak olup {@link #STUCK_MILLIS} boyunca bir bloktan fazla ilerleyemeyen asker takilmistir. */
@@ -570,14 +582,24 @@ public final class Retinue {
 
     /** Ayakta durulabilecek en yakin yukseklik; bulunamazsa yedek konum. */
     static Location safe(Location wanted, Location fallback) {
-        for (int dy : new int[] {0, 1, -1, 2, -2, 3}) {
+        return ground(wanted).orElse(fallback);
+    }
+
+    /**
+     * Ayni x/z'de, istenen yukseklige en yakin kati zemin (su ve hava degil). Oyuncu tepede ya da
+     * havadayken asker onun yuksekligine degil, ayaginin altindaki zemine hedeflenir.
+     */
+    static Optional<Location> ground(Location wanted) {
+        for (int dy : GROUND_SEARCH) {
             Block feet = wanted.getBlock().getRelative(0, dy, 0);
-            if (feet.isPassable() && feet.getRelative(BlockFace.UP).isPassable()
+            if (feet.isPassable() && !feet.isLiquid() && feet.getRelative(BlockFace.UP).isPassable()
                     && feet.getRelative(BlockFace.DOWN).getType().isSolid()) {
-                return feet.getLocation().add(0.5, 0, 0.5);
+                Location at = feet.getLocation().add(0.5, 0, 0.5);
+                at.setYaw(wanted.getYaw());
+                return Optional.of(at);
             }
         }
-        return fallback;
+        return Optional.empty();
     }
 
     private static double square(double value) {
