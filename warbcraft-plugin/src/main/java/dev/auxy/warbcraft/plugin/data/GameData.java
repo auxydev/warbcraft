@@ -18,6 +18,7 @@ import java.util.Map;
  * @param garrisonSizes   sehir/kale kimligi -> taban garnizon boyutu
  * @param cultureNames    kultur kimligi -> gorunen ad
  * @param cultureSkins    kultur kimligi -> askerlerin skini
+ * @param kingSkins       NPC kral kimligi -> skini
  * @param bandits         haydut cetesi turleri ve dogma ayarlari
  */
 public record GameData(
@@ -34,5 +35,6 @@ public record GameData(
         Map<String, Integer> garrisonSizes,
         Map<String, String> cultureNames,
         Map<String, Skin> cultureSkins,
+        Map<String, Skin> kingSkins,
         BanditData bandits) {
 }

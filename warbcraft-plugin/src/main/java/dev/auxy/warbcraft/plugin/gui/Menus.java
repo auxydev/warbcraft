@@ -4,6 +4,7 @@ import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
 import dev.auxy.warbcraft.plugin.command.ClanCommand;
 import dev.auxy.warbcraft.plugin.field.Retinue;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -68,6 +69,10 @@ public final class Menus implements Listener {
 
     public void openMain(Player player) {
         open(new MainMenu(this, player));
+    }
+
+    public void openQuests(Player player) {
+        open(new QuestMenu(this, player));
     }
 
     public void openParty(Player player) {
@@ -174,6 +179,9 @@ public final class Menus implements Listener {
     // ---------------------------------------------------------------- sefer defteri
 
     public void giveJournal(Player player) {
+        if (NpcTags.isAnyNpc(player)) {
+            return;
+        }
         for (ItemStack item : player.getInventory().getContents()) {
             if (isJournal(item)) {
                 return;

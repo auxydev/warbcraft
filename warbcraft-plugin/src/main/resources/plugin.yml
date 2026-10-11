@@ -7,7 +7,7 @@ authors: [auxydev]
 website: https://github.com/auxydev/warbcraft
 # Citizens: askerler ve haydutlar skinli insan NPC'leridir. 1.21.1 icin Citizens 2.0.35 gerekir.
 depend: [Citizens]
-softdepend: [ViaVersion]
+softdepend: [ViaVersion, squaremap]
 
 commands:
   menu:

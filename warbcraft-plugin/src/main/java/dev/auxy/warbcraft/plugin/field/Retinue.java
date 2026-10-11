@@ -311,7 +311,7 @@ public final class Retinue {
     private void tick() {
         ticks++;
         boolean sync = ticks % SYNC_EVERY == 0;
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : NpcTags.realPlayers()) {
             Band band = band(player);
             if (!band.deployed || player.isDead() || player.getGameMode() == GameMode.SPECTATOR) {
                 dismissAll(band);
@@ -589,7 +589,7 @@ public final class Retinue {
      * Ayni x/z'de, istenen yukseklige en yakin kati zemin (su ve hava degil). Oyuncu tepede ya da
      * havadayken asker onun yuksekligine degil, ayaginin altindaki zemine hedeflenir.
      */
-    static Optional<Location> ground(Location wanted) {
+    public static Optional<Location> ground(Location wanted) {
         for (int dy : GROUND_SEARCH) {
             Block feet = wanted.getBlock().getRelative(0, dy, 0);
             if (feet.isPassable() && !feet.isLiquid() && feet.getRelative(BlockFace.UP).isPassable()

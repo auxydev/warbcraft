@@ -1,6 +1,7 @@
 package dev.auxy.warbcraft.plugin.gui;
 
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ final class PlayerPickerMenu extends Menu {
 
     @Override
     protected void render() {
-        List<? extends Player> others = Bukkit.getOnlinePlayers().stream().filter(p -> !p.equals(viewer)).toList();
+        List<? extends Player> others = NpcTags.realPlayers().stream().filter(p -> !p.equals(viewer)).toList();
         int slot = 0;
         for (Player other : others) {
             if (slot >= MAX) {

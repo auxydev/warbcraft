@@ -47,7 +47,7 @@ public final class RetinueListener implements Listener {
         if (victim instanceof Player owner && !NpcTags.isAnyNpc(owner)) {
             retinue.recordThreat(owner, living);
         } else if (attacker instanceof Player owner && !NpcTags.isAnyNpc(owner) && victim instanceof LivingEntity target
-                && (retinue.isFoe(target, owner) || tags.isRetinue(target))) {
+                && (retinue.isFoe(target, owner) || tags.isRetinue(target) || tags.guardOf(target).isPresent())) {
             retinue.recordThreat(owner, target);
         }
         if (tags.isRetinue(victim)) {

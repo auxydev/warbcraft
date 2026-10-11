@@ -160,7 +160,7 @@ public final class Bandits {
     private void trySpawns() {
         BanditData data = data();
         long now = System.currentTimeMillis();
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : NpcTags.realPlayers()) {
             if (player.getGameMode() == GameMode.SPECTATOR || player.getGameMode() == GameMode.CREATIVE) {
                 continue;
             }

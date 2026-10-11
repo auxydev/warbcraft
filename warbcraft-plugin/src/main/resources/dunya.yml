@@ -16,19 +16,27 @@ kralliklar:
   valdor:
     ad: Valdor Krallığı
     kultur: valdor
-    kral: {id: kral_aldric, ad: Kral Aldric, makam: valdheim}
+    kral: {id: kral_aldric, ad: Kral Aldric, makam: valdheim,
+           skin: {doku: "ewogICJ0aW1lc3RhbXAiIDogMTc2OTMwMjk0MjE4NCwKICAicHJvZmlsZUlkIiA6ICIwM2FlZmNjYWE2NzE0ZDFhOThhY2Q2N2QxNjA0NzQyZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJUYXpyaXh4IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2JiZDdjNWFkMmUzMzFlZmNhMWI5MzE1NjU3YzcyMjJkMTYwZDljMzhlMjFlMDBhN2UyOTY1ZTYyZDI3YmYxNDUiCiAgICB9CiAgfQp9",
+                  imza: "rcHGlkEVfjsZIz+NQZS96Ndx28U0egWRXjw8icrYb+PNWmabu198R8AF8v6TK/7/65YG6PW9rkbwDeR1ych4LSDfaxrzyga4nOAcct1Nn1005o/mLXxvaM4mCQuOxvQu+rn95aq7JztmJ0jqCYra7YJUFBJL3tueNKynu3Cde9w9pAIfCnHmkqzlrb0VAVhyzDgiaxLG6fiYEj+ZM11fyldd9EGZMsGpdbTS9bBLjrGt0Xp4Jn0rhow2U5wKj4ARWnot9BJn97hYVlQf0h2SQl7GlqWExAr/4Ztn3rJzTbZY8+8ya7BFD5Jf8Uj7tWDee+0EmVhaHA7B987FkWazsDIg9KZuWj9npdNP8tvr7I0ZpQeukWYVmxyiP5MFwe7wRx211ctuN3/0QvfEuGKmG5O79VPb5XvjcQ2iyYfFHZsm/dHogWivMulbOSv+y6vJZgMYCHA9NQoMoAsp7WTisNdE84nYBTZlu8UNm07H8t8iAcCPOsf3gmO/fMow4fdzLJe/opyK4EyUjvMH6hLePPmdOVqJV3zPxhGJWYZ6rvQuljEUK03arBJCoybgLh+Cv73pClSmJXDkPqlZ09/5hlGDWYJLPSdU8XgN5jGKAwdTTQfa0vJYzu9RgRyNirztdTSAZYeH642P2sftePgY85xJNLMCeb+dVIXqksZAta0="}}  # mineskin.org/66796f2dfe9b468ebf9cd096d2196be1
   nordhem:
     ad: Nordhem Krallığı
     kultur: nordhem
-    kral: {id: kral_ragnvald, ad: Kral Ragnvald, makam: isfjord}
+    kral: {id: kral_ragnvald, ad: Kral Ragnvald, makam: isfjord,
+           skin: {doku: "ewogICJ0aW1lc3RhbXAiIDogMTYxNzMzMDY2MjIxMSwKICAicHJvZmlsZUlkIiA6ICIxNzhmMTJkYWMzNTQ0ZjRhYjExNzkyZDc1MDkzY2JmYyIsCiAgInByb2ZpbGVOYW1lIiA6ICJzaWxlbnRkZXRydWN0aW9uIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzdlODYzMjFhZDU1ZTBkYmU5MDRjZjAxYjYxNjhmNTU2MWM5ZTBlZGNkNzFiMjU3MmQ1MDIyZDNkYjJlMzM3ZGYiCiAgICB9CiAgfQp9",
+                  imza: "Pm31CYAoiG5chgFSgr7MBKCfRAtD5Jpq9eLuEDZL3fzSO16SwlxPDYcX9k60JDhMqsOGjglhiVhCmDHJDLJm4OagN+t9eshdwNi0ziecj1f0dgFk7aboPFWFYZWrwpg7GUB1xu8DIENZK+ZMQ7i3dzHTh1BF8Z0IBlM9kIjFg6fDLFFgEhUurEcHY0K0xpTgDu8H2PR0V1k5Y/idyzDgpNl5cxNsMSu2AY+iJv4qjGy4Ymab9rmDusF87DN/GuY1cLqYoKNZ0UJer/utQpEXgChTI0hT3rO2y8JLrt4jJ4Dn6XY5dI3bk9Q1rBBjuayu4H9KPFl1safBN6iryarJcztE0ZSdCE1coVCfJSktwNz4j4M4kJiCgnPk/nPNGq6nrtKQORgFE8PPhsS2hu2qwfprc9YnEFVnoUvt8lf6/8HKVGavOcpe4nrlvbmmmpRikI35KnaE+V3YPeqjKwe63DIXBrJl/VQakKrpugraAcehX6cn2r+fLqH5Ic4yQf77RUJNii0eWdmS0n7A3/aY1WlKCVngS/MZXttgNYS00iH4tEpb5AQb4SekhQ4zERVeup9xSqICxN+0emw8YVy9xUvkfrfKveBpoenLhvLaIfmXD6EdZXwGXDIqxLQZR70W3h0cv+Hc+ivKhrJL6GyEQ8x5WJjulUjCln8VhlMOmwA="}}  # mineskin.org/61c0229d1efc4f178b129d7804f24207
   aurelya:
     ad: Aurelya İmparatorluğu
     kultur: aurelya
-    kral: {id: imparator_kassian, ad: İmparator Kassian, makam: aurelion}
+    kral: {id: imparator_kassian, ad: İmparator Kassian, makam: aurelion,
+           skin: {doku: "eyJ0aW1lc3RhbXAiOjE1MzMxMTQ0NTczNzgsInByb2ZpbGVJZCI6ImUzYjQ0NWM4NDdmNTQ4ZmI4YzhmYTNmMWY3ZWZiYThlIiwicHJvZmlsZU5hbWUiOiJNaW5pRGlnZ2VyVGVzdCIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjc5ZTdmYWI0ODgxNmI1NzViZTcwM2EyMjE4YmZlZTM1MjM5MTQ3YWQxMWM1Nzg3OWI0OTNlOWEzYTJjODhkNyJ9fX0=",
+                  imza: "oE/ZhKQEwXv4rhJTY+tFL6zkH51lepULsKjtjIQw4MCD2Gs5Wor9Xf2Pfvcl1qCgrnYeKXkbK+aoKLcOGLgL8jzT5ZVcc2ke3+8pvpQ8aEPpKozZFeain7CET/13SgSre/43Qkl+9Jzu7g7Hj6UpB/hhF31o6R9HceHFx7rBKOrbyUIMfedaycFm0rhNIbLLZ71cUgWEr4rt+Zd9xYjWpPtkAkklcDiA8PToKfW6zNM4UHIdEQu1UtpDEjqTy/ufGgWpDcM7kSfMFCodYQRGR4RJVx0tN/Go4DINrCSv0ZpfVm0xDROtCNmt8Hr8w6p5xg+TiLlQjWxApiPWBM8KExsKN3G4rGzZMA5jQK2qdPvIEOVYLQ1UOR5KD+XkP5kcgO3gbyhUtHLlNRyKhl3A9p93fSI/VMhDpyudiqTsGpWuD1sxq5eIiTc9KJm/KXTxGCc7W6lNLXxG4T1xfyvKiwZ9dWhdJbr7pJ5Y8AMN267Z8JwnQQhH+cpJkOOyApz5p1qIQaMi7PXxXvzpuGwhIHmhsyzPbC/AV/OI9PfTUr2e7buCCAZw2mqRudNRWGQWVVEbZ++xdNUhhFcNlJX9x3J/F1CStKG/jzx/chrUMBMYfzBF9uP3W48DzWMsKU39YpZc/TFSuXXuXvjDjcwTkOSBSKJjvY+pqc1bmq5gx9k="}}  # mineskin.org/f9eba367336d4dc494efafc5217100fe
   karahan:
     ad: Karahan Hanlığı
     kultur: karahan
-    kral: {id: han_kutluay, ad: Han Kutluay, makam: karakum}
+    kral: {id: han_kutluay, ad: Han Kutluay, makam: karakum,
+           skin: {doku: "ewogICJ0aW1lc3RhbXAiIDogMTYyNTE4MzA4NDYxMiwKICAicHJvZmlsZUlkIiA6ICIxYWZhZjc2NWI1ZGY0NjA3YmY3ZjY1ZGYzYWIwODhhOCIsCiAgInByb2ZpbGVOYW1lIiA6ICJMb3lfQmxvb2RBbmdlbCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9kZThlNGMzZDZiOWQ5NWJmNjc4MjVmM2Y5ZjQzZTA2OTgyZmZmOGMzNDM2ZTBmODY0ZjJiOTQ3OGM2YmI5YjFhIgogICAgfQogIH0KfQ==",
+                  imza: "IRIJHpNOOY4B4zK1lAhXmXOr1RdqPMNK4p91cSXnBaCmAxuXXLcFd70sA4A2gA930kIV7R54KIEEgJL9YX8mt7ODzCRFT0nBrRCocwfEXT/EZ/9fGskpdx1jUfFIw/ylW9PptNirBWTgrd3sMcIzP8hfUP1Lzse3L/KVGIXHU3ID7V6d6unDTO8Lxw0drkekgMut+1aqXWpbBRpt3GLWPHSExf20yjZ6ub8WXumD2SzVyxGjTu4WwumxA1MjFofR4+TwYfg0Sy0gJjwjk1jQf95Bp8auA2ZHKzPaBa66qvs8uJhvh+Bu2QKg7EOMSjFDQCEj/gqOviLdJgz6XlWJ3CEYBC1vpg/oOPjdpKqKGsI0BUfG8znvsMfOpiz8/xtDLfmK+IrtqAq5rHMnsLhD/+FFE2FVSStGAZTIlWQzXyr2E/0R99goItL862c/xs4ewQ9AmjALj0c2DuKALu6w0j0fi9Q6vThs+nqb0s8VYwBfwtNmRI23HMZxdRipsDvG+Tt/AcUetvOBPIZf/jHypywVO1f5D+wEiMbuHZxdG9vmTf7FbvKFJARZu2FMIfmn0v1Sfo2Di/XUe6PcDpv6CXlhkN4gCHp7xNlN2aHJjuKx2qB0U6/6EaCMUslw8eGXo5zu8Nwv7haCGY/pe6TES7pz01S+/bXU8PK5x5QcRY8="}}  # mineskin.org/d93fe29cf6c64332a78f6aef0c293eca
 
 # un: klan kademesini belirler (50/150/350/900/1600/3000). NPC lord ordusu kademeyle büyür
 # ama npc-denge ayarlarıyla oyunculardan hep küçük kalır.

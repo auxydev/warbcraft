@@ -4,6 +4,7 @@ import dev.auxy.warbcraft.core.faction.Clan;
 import dev.auxy.warbcraft.core.faction.Settlement;
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -136,7 +137,7 @@ public final class ClanCommand extends BaseCommand {
             return complete(List.of("bilgi", "kur", "davet", "katil", "ayril"), args[0]);
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("davet")) {
-            return complete(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList(), args[1]);
+            return complete(NpcTags.realPlayers().stream().map(Player::getName).toList(), args[1]);
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("katil") && sender instanceof Player player) {
             return complete(invites.getOrDefault(player.getUniqueId(), Set.of()), args[1]);

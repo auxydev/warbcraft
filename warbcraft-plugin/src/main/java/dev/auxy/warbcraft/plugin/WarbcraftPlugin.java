@@ -19,6 +19,9 @@ import dev.auxy.warbcraft.plugin.data.StateStore;
 import dev.auxy.warbcraft.plugin.field.Retinue;
 import dev.auxy.warbcraft.plugin.field.RetinueListener;
 import dev.auxy.warbcraft.plugin.gui.Menus;
+import dev.auxy.warbcraft.plugin.map.WebMap;
+import dev.auxy.warbcraft.plugin.world.SettlementLife;
+import dev.auxy.warbcraft.core.npc.NpcKing;
 import dev.auxy.warbcraft.plugin.npc.NpcBodies;
 import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import dev.auxy.warbcraft.plugin.listener.Bandits;
@@ -48,7 +51,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
     private static final long AUTOSAVE_TICKS = 5 * 60 * 20L;
     /** {@code -Dwarbcraft.deneme=true}: yerel deneme sunucusu (gradlew runServer). */
     private static final boolean TEST_MODE = Boolean.getBoolean("warbcraft.deneme");
-    private static final int TEST_SITE_SPACING = 120;
+    private static final double TEST_SITE_SCALE = 0.25;
+    private static final double TEST_RADIUS_SCALE = 0.4;
+    private static final int TEST_MIN_RADIUS = 14;
     /** dunya.yml'de konumun /wbadmin konum ile elle verildigini gosteren anahtar. */
     private static final String MANUAL_SITE = "elle";
 
@@ -56,6 +61,8 @@ public final class WarbcraftPlugin extends JavaPlugin {
     private Retinue retinue;
     private Bandits bandits;
     private NpcBodies bodies;
+    private WebMap webMap;
+    private SettlementLife settlementLife;
 
     @Override
     public void onEnable() {
@@ -100,14 +107,29 @@ public final class WarbcraftPlugin extends JavaPlugin {
         register("sezon", new SeasonCommand(game));
         register("dinar", new DenarCommand(game));
         register("menu", new MenuCommand(game, menus::openMain));
-        register("wbadmin", new AdminCommand(game, this, bandits, retinue));
+        register("wbadmin", new AdminCommand(game, this, bandits, retinue,
+                () -> settlementLife == null ? List.of() : settlementLife.describeActive()));
         getServer().getPluginManager().registerEvents(new GameListener(game, bandits, retinue), this);
         getServer().getPluginManager().registerEvents(new RetinueListener(retinue, menus::openParty), this);
         getServer().getPluginManager().registerEvents(menus, this);
-        getServer().getOnlinePlayers().forEach(game::profile);
-        getServer().getOnlinePlayers().forEach(menus::giveJournal);
+        NpcTags.realPlayers().forEach(game::profile);
+        NpcTags.realPlayers().forEach(menus::giveJournal);
+        settlementLife = new SettlementLife(this, game, bodies, tags, menus::openQuests);
+        getServer().getPluginManager().registerEvents(settlementLife, this);
         retinue.start();
         bandits.start();
+        settlementLife.start();
+        if (getServer().getPluginManager().isPluginEnabled("squaremap")) {
+            webMap = new WebMap(this, game);
+            webMap.start();
+            for (NpcKing king : data.kings().values()) {
+                settlementLife.seatOf(king).ifPresent(seat -> webMap.setPin(WebMap.Layer.KINGS, king.id(), seat, 6,
+                        WebMap.awt(game.realm().kingdom(king.kingdomId())),
+                        "<b>" + WebMap.esc(king.name()) + "</b><br>" + WebMap.esc(game.realm().kingdom(king.kingdomId()).name())
+                                + "<br>Görev panosu: sağ tık"));
+            }
+            getLogger().info("Web harita katmanlari squaremap'e eklendi.");
+        }
 
         long dayTicks = data.settings().dayLengthMinutes() * 60L * 20L;
         getServer().getScheduler().runTaskTimer(this, () -> {
@@ -123,6 +145,12 @@ public final class WarbcraftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (webMap != null) {
+            webMap.shutdown();
+        }
+        if (settlementLife != null) {
+            settlementLife.shutdown();
+        }
         if (retinue != null) {
             retinue.shutdown();
         }
@@ -186,25 +214,29 @@ public final class WarbcraftPlugin extends JavaPlugin {
     }
 
     /**
-     * Deneme modu: yerlesimleri spawn cevresine 5 sutunluk bir izgaraya dizer (dosyaya yazmaz).
-     * {@code /wbadmin konum} ile elle konulanlar yerinde kalir.
+     * Deneme modu: dunya.yml'deki gercek yerlesimi spawn merkezli olarak {@link #TEST_SITE_SCALE} oraninda
+     * kucultur (dosyaya yazmaz). Kralliklar haritadaki yonlerini korur, her biri kendi yerlesimleriyle
+     * bir arada kalir; her sey spawn'dan birkac yuz blok icindedir. {@code /wbadmin konum} ile elle
+     * konulanlar yerinde kalir.
      */
     private void placeSettlementsNearSpawn(GameData data) {
         Location spawn = getServer().getWorlds().getFirst().getSpawnLocation();
         String world = Objects.requireNonNull(spawn.getWorld(), "world").getName();
         YamlConfiguration worldYaml = YamlConfiguration.loadConfiguration(dataFile(WORLD_FILE));
-        int index = 0;
         for (Settlement settlement : data.realm().settlements()) {
             if (worldYaml.getBoolean("yerlesimler." + settlement.id() + ".konum." + MANUAL_SITE)) {
                 getLogger().info("Elle konulmuş, yerinde kalıyor: " + settlement.name());
-                index++;
                 continue;
             }
-            int x = spawn.getBlockX() + (index % 5) * TEST_SITE_SPACING;
-            int z = spawn.getBlockZ() + (index / 5) * TEST_SITE_SPACING;
-            data.sites().put(settlement.id(), new SettlementSite(settlement.id(), world, x, spawn.getBlockY(), z, 50));
-            getLogger().info("Deneme konumu: " + settlement.name() + " -> " + x + ", " + z);
-            index++;
+            SettlementSite real = data.sites().get(settlement.id());
+            if (real == null) {
+                continue;
+            }
+            int x = spawn.getBlockX() + (int) Math.round(real.x() * TEST_SITE_SCALE);
+            int z = spawn.getBlockZ() + (int) Math.round(real.z() * TEST_SITE_SCALE);
+            int radius = Math.max(TEST_MIN_RADIUS, (int) Math.round(real.radius() * TEST_RADIUS_SCALE));
+            data.sites().put(settlement.id(), new SettlementSite(settlement.id(), world, x, spawn.getBlockY(), z, radius));
+            getLogger().info("Deneme konumu: " + settlement.name() + " -> " + x + ", " + z + " (yarıçap " + radius + ")");
         }
     }
 

@@ -2,6 +2,7 @@ package dev.auxy.warbcraft.plugin.command;
 
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -46,7 +47,7 @@ public final class DenarCommand extends BaseCommand {
             return complete(List.of("gonder"), args[0]);
         }
         if (args.length == 2) {
-            return complete(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList(), args[1]);
+            return complete(NpcTags.realPlayers().stream().map(Player::getName).toList(), args[1]);
         }
         return List.of();
     }

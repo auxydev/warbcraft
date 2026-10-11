@@ -23,6 +23,7 @@ import dev.auxy.warbcraft.plugin.data.GameData;
 import dev.auxy.warbcraft.plugin.data.PlayerProfile;
 import dev.auxy.warbcraft.plugin.data.PlayerStore;
 import dev.auxy.warbcraft.plugin.data.SettlementSite;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -208,7 +209,7 @@ public final class Game {
 
     /** Bir sefer gunu: maaslar, iyilesme, uretim, asker havuzlari, gorev panolari. */
     public void dailyTick() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : NpcTags.realPlayers()) {
             PlayerProfile profile = profile(player);
             Party party = profile.party();
             if (party.isEmpty()) {

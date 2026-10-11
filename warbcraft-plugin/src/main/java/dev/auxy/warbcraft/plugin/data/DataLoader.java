@@ -84,6 +84,7 @@ public final class DataLoader {
 
         Realm realm = new Realm();
         Map<String, NpcKing> kings = new LinkedHashMap<>();
+        Map<String, Skin> kingSkins = new LinkedHashMap<>();
         ConfigurationSection kingdoms = section(worldYaml, "kralliklar");
         for (String id : kingdoms.getKeys(false)) {
             ConfigurationSection k = section(kingdoms, id);
@@ -94,6 +95,7 @@ public final class DataLoader {
             String kingId = require(k, "kral.id");
             realm.addKingdom(new Kingdom(id, require(k, "ad"), culture, kingId, true));
             kings.put(kingId, new NpcKing(kingId, require(k, "kral.ad"), id, require(k, "kral.makam")));
+            kingSkins.put(kingId, Skin.parse(k.getConfigurationSection("kral.skin"), "kralliklar." + id + ".kral.skin"));
         }
 
         ConfigurationSection clans = section(worldYaml, "klanlar");
@@ -149,7 +151,7 @@ public final class DataLoader {
 
         return new GameData(tree, realm, loadSeason(section(config, "sezon")), balance,
                 loadSettings(section(config, "oyun")), kings, goods, goodItems, sites, villageProduce,
-                garrisonSizes, cultureNames, cultureSkins, bandits);
+                garrisonSizes, cultureNames, cultureSkins, kingSkins, bandits);
     }
 
     /**

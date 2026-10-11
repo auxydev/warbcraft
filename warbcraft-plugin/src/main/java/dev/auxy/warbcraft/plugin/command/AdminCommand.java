@@ -8,6 +8,7 @@ import dev.auxy.warbcraft.plugin.Msg;
 import dev.auxy.warbcraft.plugin.WarbcraftPlugin;
 import dev.auxy.warbcraft.plugin.field.Retinue;
 import dev.auxy.warbcraft.plugin.listener.Bandits;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 /** /wbadmin — sunucu yonetimi. */
 public final class AdminCommand extends BaseCommand {
@@ -25,12 +27,15 @@ public final class AdminCommand extends BaseCommand {
     private final WarbcraftPlugin plugin;
     private final Bandits bandits;
     private final Retinue retinue;
+    private final Supplier<List<String>> settlementInfo;
 
-    public AdminCommand(Game game, WarbcraftPlugin plugin, Bandits bandits, Retinue retinue) {
+    public AdminCommand(Game game, WarbcraftPlugin plugin, Bandits bandits, Retinue retinue,
+                        Supplier<List<String>> settlementInfo) {
         super(game);
         this.plugin = plugin;
         this.bandits = bandits;
         this.retinue = retinue;
+        this.settlementInfo = settlementInfo;
     }
 
     @Override
@@ -75,6 +80,7 @@ public final class AdminCommand extends BaseCommand {
                     Msg.line(sender, "  Yakında haydut çetesi yok.");
                 }
                 gangs.forEach(line -> Msg.line(sender, "  " + line));
+                settlementInfo.get().forEach(line -> Msg.line(sender, "  Yerleşim: " + line));
             }
             case "un" -> {
                 String usage = "/" + label + " un <oyuncu> <miktar>";
@@ -142,7 +148,7 @@ public final class AdminCommand extends BaseCommand {
             return complete(game.tree().all().stream().map(t -> t.id()).toList(), args[2]);
         }
         if (args.length == 2 && (sub.equals("dinar") || sub.equals("un") || sub.equals("asker") || sub.equals("durum"))) {
-            return complete(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList(), args[1]);
+            return complete(NpcTags.realPlayers().stream().map(Player::getName).toList(), args[1]);
         }
         if (args.length == 2 && sub.equals("haydut")) {
             return complete(bandits.kindIds(), args[1]);

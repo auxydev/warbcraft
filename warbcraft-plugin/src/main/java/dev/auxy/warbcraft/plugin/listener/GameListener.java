@@ -34,6 +34,9 @@ public final class GameListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        if (NpcTags.isAnyNpc(event.getPlayer())) {
+            return;
+        }
         game.profile(event.getPlayer());
     }
 
