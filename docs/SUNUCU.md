@@ -50,6 +50,11 @@ değil ViaVersion'ı güncellemek yeterlidir.
 Daha yeni Citizens sürümleri 1.21.1'i desteklemez. Deneme sunucusu (`baslat.bat`) onu kendisi indirir:
 <https://ci.citizensnpcs.co/job/Citizens2/3598/>
 
+**Web harita (isteğe bağlı):** squaremap 1.3.2 kuruluysa `http://<sunucu-ip>:8080` adresinde
+yerleşimler, krallar ve lord orduları görünür. İnternetten erişim için 8080 portu dışarı açılmalıdır.
+Yeni haritada önce Chunky ile alanı üret (`/chunky radius 2500`, `/chunky start`), sonra
+`/map fullrender minecraft:overworld`.
+
 **Eski kurulumu güncellerken:** `plugins/Warbcraft/birlikler.yml` dosyası kendiliğinden güncellenmez.
 Yeni haydut birlikleri (`haydut_dag`, `haydut_col` vb.) yoksa eklenti açılışta hangi birliğin eksik
 olduğunu söyler; dosyayı depodaki sürümle değiştir ya da eksik satırları ekle.

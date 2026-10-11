@@ -20,6 +20,7 @@ import dev.auxy.warbcraft.plugin.field.Retinue;
 import dev.auxy.warbcraft.plugin.field.RetinueListener;
 import dev.auxy.warbcraft.plugin.gui.Menus;
 import dev.auxy.warbcraft.plugin.map.WebMap;
+import dev.auxy.warbcraft.plugin.world.LordArmies;
 import dev.auxy.warbcraft.plugin.world.SettlementLife;
 import dev.auxy.warbcraft.core.npc.NpcKing;
 import dev.auxy.warbcraft.plugin.npc.NpcBodies;
@@ -27,6 +28,7 @@ import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import dev.auxy.warbcraft.plugin.listener.Bandits;
 import dev.auxy.warbcraft.plugin.listener.GameListener;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,6 +39,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -63,6 +66,7 @@ public final class WarbcraftPlugin extends JavaPlugin {
     private NpcBodies bodies;
     private WebMap webMap;
     private SettlementLife settlementLife;
+    private LordArmies lordArmies;
 
     @Override
     public void onEnable() {
@@ -108,7 +112,7 @@ public final class WarbcraftPlugin extends JavaPlugin {
         register("dinar", new DenarCommand(game));
         register("menu", new MenuCommand(game, menus::openMain));
         register("wbadmin", new AdminCommand(game, this, bandits, retinue,
-                () -> settlementLife == null ? List.of() : settlementLife.describeActive()));
+                this::describeWorld));
         getServer().getPluginManager().registerEvents(new GameListener(game, bandits, retinue), this);
         getServer().getPluginManager().registerEvents(new RetinueListener(retinue, menus::openParty), this);
         getServer().getPluginManager().registerEvents(menus, this);
@@ -130,6 +134,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
             }
             getLogger().info("Web harita katmanlari squaremap'e eklendi.");
         }
+        lordArmies = new LordArmies(this, game, bodies, tags, webMap);
+        getServer().getPluginManager().registerEvents(lordArmies, this);
+        lordArmies.start();
 
         long dayTicks = data.settings().dayLengthMinutes() * 60L * 20L;
         getServer().getScheduler().runTaskTimer(this, () -> {
@@ -148,6 +155,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
         if (webMap != null) {
             webMap.shutdown();
         }
+        if (lordArmies != null) {
+            lordArmies.shutdown();
+        }
         if (settlementLife != null) {
             settlementLife.shutdown();
         }
@@ -163,6 +173,18 @@ public final class WarbcraftPlugin extends JavaPlugin {
         if (game != null) {
             saveAll();
         }
+    }
+
+    /** /wbadmin durum: oyuncunun cevresindeki etkin yerlesimler ve lord ordulari. */
+    private List<String> describeWorld(Player around) {
+        List<String> lines = new ArrayList<>();
+        if (settlementLife != null) {
+            settlementLife.describeActive().forEach(line -> lines.add("Yerleşim: " + line));
+        }
+        if (lordArmies != null) {
+            lordArmies.describe(around.getLocation(), 400).forEach(line -> lines.add("Lord: " + line));
+        }
+        return lines;
     }
 
     public void saveAll() {

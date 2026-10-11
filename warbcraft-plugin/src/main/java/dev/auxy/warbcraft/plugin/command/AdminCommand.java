@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /** /wbadmin — sunucu yonetimi. */
 public final class AdminCommand extends BaseCommand {
@@ -27,15 +27,15 @@ public final class AdminCommand extends BaseCommand {
     private final WarbcraftPlugin plugin;
     private final Bandits bandits;
     private final Retinue retinue;
-    private final Supplier<List<String>> settlementInfo;
+    private final Function<Player, List<String>> worldInfo;
 
     public AdminCommand(Game game, WarbcraftPlugin plugin, Bandits bandits, Retinue retinue,
-                        Supplier<List<String>> settlementInfo) {
+                        Function<Player, List<String>> worldInfo) {
         super(game);
         this.plugin = plugin;
         this.bandits = bandits;
         this.retinue = retinue;
-        this.settlementInfo = settlementInfo;
+        this.worldInfo = worldInfo;
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class AdminCommand extends BaseCommand {
                     Msg.line(sender, "  Yakında haydut çetesi yok.");
                 }
                 gangs.forEach(line -> Msg.line(sender, "  " + line));
-                settlementInfo.get().forEach(line -> Msg.line(sender, "  Yerleşim: " + line));
+                worldInfo.apply(target).forEach(line -> Msg.line(sender, "  " + line));
             }
             case "un" -> {
                 String usage = "/" + label + " un <oyuncu> <miktar>";

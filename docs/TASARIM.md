@@ -98,8 +98,16 @@ Durum işaretleri: ✅ yapıldı (çekirdek + eklenti) · 🧪 çekirdekte hazı
   - NPC lord ordusu, aynı kademedeki oyuncu sınırının %60'ı kadar.
   - NPC lordlar en fazla kademe 4 asker taşır. Seçkin birlikler (5–6) oyunculara özeldir.
   - NPC garnizonları %70 boyutunda.
-- 🔜 NPC lord partilerinin haritada dolaşması: haydut kovalama, köy yağmalama, kuşatma. Önce soyut
-  simülasyon (otomatik çözüm), oyuncu yakındaysa gerçek varlık.
+- ✅ **Krallar başkentlerinde:** skinli kral NPC'si (ölümsüz, sağ tıkla görev panosu) ve iki muhafızı.
+- ✅ **Nöbetçiler:** şehir ve kalelerde garnizondan devriye gezen nöbetçiler (`GarrisonWatch`: garnizon
+  büyüklüğüne göre 2–8). Savaştaki krallığın oyuncusuna, askerine ve haydutlara saldırır; ölen
+  nöbetçi garnizondan düşer. Yerleşime girene başlık, merkezde ad tabelası.
+- ✅ **Lord orduları haritada dolaşır** (`LordRoute`): her NPC lord kendi krallığının yerleşimleri
+  arasında gider, konaklar. Oyuncu uzaktayken soyut, yaklaşınca lord ve en güçlü 6 askeri NPC olarak
+  belirir. Savaştaki krallığın oyuncularına ve haydutlara saldırır; yenilen lord 10 dk sonra
+  başkentinden yeniden çıkar.
+- ✅ **Web harita** (squaremap, `http://sunucu:8080`): yerleşimler, krallar ve lord orduları canlı.
+- 🔜 Lordların köy yağmalaması, kuşatma, birbirleriyle savaşması (otomatik çözüm).
 
 ### Ekonomi
 - ✅ Dinar kesesi. Para negatife düşmez.
