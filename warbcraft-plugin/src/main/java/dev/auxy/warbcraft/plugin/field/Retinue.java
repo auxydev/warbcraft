@@ -140,6 +140,9 @@ public final class Retinue {
         if (order != FieldOrder.CHARGE) {
             // Hucumdan donen asker eldeki kovalamayi birakip yerine gelsin.
             for (Soldier soldier : band.soldiers.values()) {
+                if (!soldier.walker().isSpawned()) {
+                    continue;
+                }
                 soldier.walker().getNavigator().cancelNavigation();
                 soldier.marchTarget = null;
             }
@@ -227,6 +230,9 @@ public final class Retinue {
         }
         for (Soldier soldier : band.soldiers.values()) {
             if (victim.equals(soldier.npc.getEntity()) || (soldier.mount != null && victim.equals(soldier.mount.getEntity()))) {
+                if (!soldier.walker().isSpawned()) {
+                    return;
+                }
                 Navigator navigator = soldier.walker().getNavigator();
                 if (navigator.getEntityTarget() == null) {
                     navigator.setTarget(attacker, true);
@@ -354,7 +360,7 @@ public final class Retinue {
         for (Soldier soldier : band.soldiers.values()) {
             NPC walker = soldier.walker();
             Entity body = walker.getEntity();
-            if (body == null) {
+            if (body == null || !walker.isSpawned()) {
                 continue;
             }
             FieldFormation.Slot slot = band.formation.slot(index++);

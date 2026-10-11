@@ -1,6 +1,7 @@
 # Dolaşan haydut çeteleri. Çete, doğduğu yerin biyomuna göre türünü seçer.
 # Birlikler birlikler.yml'deki "haydut" kültüründendir; NPC dengesi gereği en fazla kademe 4.
-# Skin: {oyuncu: <Minecraft kullanıcı adı>} ya da mineskin.org'dan {doku: ..., imza: ...}.
+# skin: {oyuncu: <Minecraft kullanıcı adı>} ya da mineskin.org'dan {doku: ..., imza: ...}.
+# renk: atlı haydutların at zırhı rengi.
 
 cete:
   deneme-araligi-saniye: 45     # her oyuncunun çevresinde bu kadar saniyede bir çete denemesi
@@ -17,35 +18,47 @@ turler:
     biyomlar: [windswept_hills, windswept_gravelly_hills, windswept_forest, stony_peaks, jagged_peaks,
                frozen_peaks, snowy_slopes, grove, meadow]
     birlikler: {haydut_dag: [2, 4], haydut_dag_reisi: [0, 1], haydut_orman: [0, 1]}
-    skin: {}
+    skin:  # mineskin.org/39fb76c3bfb04e6d83aef38c872ae094
+      doku: "ewogICJ0aW1lc3RhbXAiIDogMTY3ODUxMjcxOTUwNSwKICAicHJvZmlsZUlkIiA6ICI4N2YzOGM1MWE4Yzc0MmNmYTY2YTgxNWExZTI2NzMzYiIsCiAgInByb2ZpbGVOYW1lIiA6ICJCZWR3YXJzQ3V0aWUiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWFlZDQxOTA0NDExZmQ5Nzg0YTk0OWZmYzA3NTE5ZmNmNGUzOTliYzgzNTEzOWE0NjRiMTczODk0ZmJkZjJmNSIKICAgIH0KICB9Cn0="
+      imza: "iYVvmHpg3l22W92qAYEdoRKyFSZQggQcayqaujimE4Z+gt3DnZ3fMsB6SfosBzJiVOl6zk0phKvvWQvX0Mz4pa2ZjH3vfTkxwpsu0ODnqN1ALVNIoMjOJQKmfzt4dSUx38PFAbh743lJivvrKj3eGhG82QvkHl/xBaLSWoof3+7TvYcov/ZpLN7xaHXK0nvyUvIqIEwaoHxh9m3i23EIIlK7lEG9yEvczgD6CeF5WlqwUzcN18bQbdt3DP6XxC3uWs/D+P5GHupmLd5un/fUZGQm3vQy5/nOzq9VoYFZrcYCvDTvbZPO4mm/GT7DpSh7+s5WkeUpdBNxNqwKGGHT7ZWtlsQEkdPR3HePP7Gfbyshf5Go0L49BGS7taJvMa1hGnfqfAwojERIUNaQG4NfdyUiW+bsYC7S3HHeVHpEg6Ib2NmIPCrK34htgcE4lL83ljpDNtNsx+dtZpirNcCIOkI8PBFrkQFV6E91ZAa9v8cw3rBe7ygyOIr5bA2mD8SwT4/94XNRhPXwceVCIbLNo7BtekZ6gU4xfmg2RKiygvmoGvz84Ay5En3yBSFp+5cjX9TqaApkSPSPnUd8Iy7lJsiXKAhJBkzCgSpdVOSb8rdxTvnUl1pE+rHGeK9mSX0lu+V+RJ8vODhc+k8fBgb0RwmOsuTe+I/Q91tCIVwvdXQ="
   col:
     ad: Çöl Akıncıları
     renk: "#D2B48C"
     biyomlar: [desert, badlands, eroded_badlands, wooded_badlands]
     birlikler: {haydut_col: [2, 4], haydut_col_akinci: [1, 2]}
-    skin: {}
+    skin:  # mineskin.org/8f037d42863e42f2a7a3b1981d9db366
+      doku: "ewogICJ0aW1lc3RhbXAiIDogMTc2NzU5ODg1OTc3NCwKICAicHJvZmlsZUlkIiA6ICJiMTM1MDRmMjMxOGI0OWNjYWFkZDcyYWVhYmMyNTQ1MCIsCiAgInByb2ZpbGVOYW1lIiA6ICJUeXBrZW4iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTQ5MTZkMjQzYjZmODZhMWYyMTBkZGFlYzcwMjM2ZGI5NmQ2YjY2NzgzYzQ1OGZhMmYzN2QyZGFmNmVlZGM4NSIKICAgIH0KICB9Cn0="
+      imza: "szjHMpBaXKuPhXbAJnWPL3H0M8GVzhivWCqNgNY8gK7bagzCGaSfZc5Khyqvji6nVPwQ4iS+UiSpMgBjFZwgVcCLxjHBUo7cBuEliuYqMy+gniUIXsoy7AV6gtCHjuRTHRmwJpmc0MeZI2me9XsPNmRh2i2iRxBubiceaent5RFCkMDJQj4JivOVpPJ9cfOOU4kC8sGqt08PmpB7Z/qXSP8JP4hPsSfOqrHuKiSZzczUSD+v3SFZf27fN2kzDQiNOvolcQpp3ocpJBO46D4HNfI9yoE6/Dy41mFxGZuN8mw37O7WdRzXXNcDV5NwLDkJ1xIc6Zs2kxZyaTHR4AIOml7pXoQ6ZrcwqwubGAhH/AOUyxS+nyMmswFITVakgnh7dQkE91EvKoCXGlPjGV8bqUwd2uo/GDpmT4xzewX3VMyFrL6WXzSzml7uc2w7LSK/0nM8wyX+9LWQwEjhuG5M70UK1zKxYwp3I7nStwkxreEcbxBIGaL1OruuaX8jf58QQsjsqIWQ37nGvqUbWcTpG9D99T5hggipJIdjKak8sQR8bz1WfgmsoFj+NidrWvRcwVnStbwcWc/kZedPzJGdGFaEGK9YGMSI8VeFpgc8tAN14JSbLLGBBnKDFINsz+1gKZV1XOon+saJmFVyuMBgJJvb+U/LlxcMIysfJwtv3KM="
   deniz:
     ad: Deniz Haydutları
     renk: "#1F3F5F"
     biyomlar: [beach, snowy_beach, stony_shore, mangrove_swamp]
     birlikler: {haydut_deniz: [2, 4], haydut_yagmaci: [1, 2]}
-    skin: {}
+    skin:  # mineskin.org/9fd2a699ae51413099029efcc60ce26c
+      doku: "eyJ0aW1lc3RhbXAiOjE1Mzg5OTkxNjI0NzcsInByb2ZpbGVJZCI6ImIwZDRiMjhiYzFkNzQ4ODlhZjBlODY2MWNlZTk2YWFiIiwicHJvZmlsZU5hbWUiOiJ4RmFpaUxlUiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2YxYmQwYjk3MjE1ZGI2NjczOTAyOThiYWM0ZGQ0MjUxMDlhNDg2OGM5ZWU1MWM2MDE1OTJlNzI0MjViMmRhNyJ9fX0="
+      imza: "Qm0PQNJPdDpTSzth+2LnyUJoJC5ZlSX9MuoBBqvOjh0GV7UXo2ke/Z7inTmsZDzEC+WIFH59QyRtt2qtWYKwY09q9xLQVqVrmis2E9glszFiIG4DEA2aW1fYvXn0uegX0+s0JxEqD8OypB+Wj9aD+VFWvk209zOiwYP+WkI+XSWrRr+5DEVW99U3L3kbMfxJrcZhV88lhECJYXTJqVh0Jpf2GDPelhSCJIZ7l+Qk+8sx9WXdfoBHcQHH8ym1s5OspicZSD6mg3H+d3b3FdmUPQ3TW04tE3dKMJGRrlImLNn+u6YYIF1Gg4ETjFj0hjFltIq/kWcFn3EmRVEtefLIQVdhJ+vbnctpG30hzemiYmjasOOfOOSjgehecS4o4uL8Vw7bJugt0ygQlCSjpqsbNIXS/fZIRjaVB0R3/8bCxM9X6rncIhShJVDIMQdVnigdL1bfSqNNVM3eQex7Vz1AFY/abPGJ3G+urwKl5mgIpIVs6SUz1ZDje5LVqChAOH8nsx1XUMV+4YeptsOQ0ug+gR3L6EiTopKBcy+/dLj58dEiPlOzXy9k6BOTRYZhWHNqJRnrosJeKzRmYBPHNBbU/juFHyyQZIBqRJlxuZUSUxNuYYXJqAFWMkGH1KCuswdZfYAlRS26pkWW/Ls10phd/unAQUseAuXxIwZBWkE6BkE="
   orman:
     ad: Orman Eşkıyaları
     renk: "#2F5A2F"
     biyomlar: [forest, flower_forest, birch_forest, old_growth_birch_forest, dark_forest, taiga, snowy_taiga,
                old_growth_pine_taiga, old_growth_spruce_taiga, jungle, sparse_jungle, bamboo_jungle, cherry_grove]
     birlikler: {haydut_orman: [2, 3], haydut_yagmaci: [1, 3]}
-    skin: {}
+    skin:  # mineskin.org/dc53adc4085046e7a6aff9b1e7f45311
+      doku: "ewogICJ0aW1lc3RhbXAiIDogMTYyMDM3NjA0OTA3MCwKICAicHJvZmlsZUlkIiA6ICI2OGJmZjk3MjcwZGY0OTA4ODIxMjM1ZjkzMTU5MGZkZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJoZUlwMTIiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTYzOTFiZTljNTY1NWY2NDM2YzE1NjBlM2Y3Y2MxMDUxODI3YjliNzc1YzEyZTE2MzU3NDcxOTBjNGVjNjAxNSIKICAgIH0KICB9Cn0="
+      imza: "jdI6CtyIDyGlfq3O3elss9v/4v3N08z/M/OAYrwcAYIkZjI8LImQNyi/kNqSB8epa3e4xRLU+LlPEYkEzEYzdnIiR4kN1JuPNwWCublQE3+1KfseDHc5AkX2MU5u9tW3zhwxxPIjbvPYteWJrMhp/pOekQX4Qp0tS4+XW6otM/060sJ24YHcTW9V4gs5MyF7ECVCcSCQyY3X5mL7jIyFl0TfWopzTx5deARh/vkXoos/WMN+MmWlq3DyWE3rqwAYH8oZtGkLo6vxt47J16RUelLcDPB7p5I+c2iHI9JMwRt6yA8OotVskpU6cQa7Vdr7DDT5Qu0GDxUBBp4neRRZKeyxwWmUS0wc+6KSImYKcdR7S0JKJPCNe7rNcg4Y0KzyOA6bYTISGQzUD33ifL6KvPBe7upoEdI52sJ3naXHfDqBgbu+w/rYAgjJvI482CEaqxatTp4ROftTIsxspzCikDg8H5bfRDWt2W5nS+kru3msxfaSesX75mS/ROka8jBTXK++2kNgJb/7IOqTE/uilg/kC9BLLQKNHHViSSoYv3J0PPrGlvs8Jyo1D9MHAIdZg09UDUpX0ypi1y7FyFQb3mEVFci2fggKzNee/LJFohTAS1fnK8DligM4a0xrgekxGsoR1bQUoC+suwfk7RrQQLa/vw2ROoKBspR71UY/U3g="
   bozkir:
     ad: Bozkır Akıncıları
     renk: "#8B6B3B"
     biyomlar: [plains, sunflower_plains, savanna, savanna_plateau, windswept_savanna, snowy_plains]
     birlikler: {haydut_bozkir: [1, 3], haydut_yagmaci: [1, 2]}
-    skin: {}
+    skin:  # mineskin.org/0011e1e2b6e64907a5c83d9009084252
+      doku: "ewogICJ0aW1lc3RhbXAiIDogMTU4ODUyMzUyMTUyNCwKICAicHJvZmlsZUlkIiA6ICIzZmM3ZmRmOTM5NjM0YzQxOTExOTliYTNmN2NjM2ZlZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJZZWxlaGEiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmZkZjRjNWQ2ZDUyZDNlZjdkN2EyZGM3OGM4ODdiNjVmMzk1NDMyOTkxNmEwMjdhNjRhMmEzM2IyYmM4YTdhOCIKICAgIH0KICB9Cn0="
+      imza: "FFLUjDd7RUM8lO8i7LjIsNk3iJAaiKwNVyNNbENta6t1x/bkAj1XXK44iMBCiLbvEsyfUwbnohPQBY2FvbJ/9j3bl9uCt7QSC7uiTmMRnmBk9EL/4wqP+N/1yc8UfRXDjmuXyfYiFup41AIBeFzGLismqRUCEPtcdrxBq9O0cM1WI/Ibxz1CjM4465FH48St8cuKO250IXv1vRuPYINspslDYYvb421V6igYZlGSDtzxx8QxLsSuPQx5OShHFGqkWz/Y0jFKxwv4c6oHkhJg7Qt4ZL7geGdLqFiW8BW0uvxQW8PMxMd2nrm+ZwiYZcUTINd5hFXbe//27b0V6dowec54K6B/NsUYR4h3v21diub3L9kosByjFK6DJc1h4te/n8/O0tw0vd0p/9CEaVvxyuLIvKxu8VRvfyt9Cpl/q+nyTcebKZXpPcC+GwovyR4QnY4jrqHZUXxmuJ1LKQSMPfUxroa88nvybAcNbkJk/qvrJg1fl3sGZLfwP7JKioiCAuzT17gAenhwG/Z0Ua61o9YYV4EjtOrd9+w3C4ZVOpkWCqpXAvyzsvnOlaC8z+ljgjK7K/ZAVLbItF2WVfQevpuw9S9BZVYSUPvOCXpiRWs53F2irYaUn0Bx/pEwXnMwKCHOAgusyFWpgnI/eHhkeIUul9WQ+KqeJUR0biGNB7M="
   yagmaci:
     ad: Yağmacılar
     renk: "#5A4632"
     biyomlar: ["*"]               # başka hiçbir türün tutmadığı biyomlar
     birlikler: {haydut_yagmaci: [3, 5]}
-    skin: {}
+    skin:  # mineskin.org/60c646f33ed347b694a306bcea191edc
+      doku: "ewogICJ0aW1lc3RhbXAiIDogMTc0NTA4ODcxNjE1OCwKICAicHJvZmlsZUlkIiA6ICJjNWVmOGQ1NDIwOWY0OTdlYWYzYzA1NjA3MjZhYTMwNSIsCiAgInByb2ZpbGVOYW1lIiA6ICJNaXNoX0RheCIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9mNDFhZjhiNmFhYzgwOGYwNDU5MjUyYmU4Y2VkYzFhZGQyYjUzN2QxNWY1ZjI2ZjQzY2Y2YzNhYmMyOTA0ZWU3IgogICAgfQogIH0KfQ=="
+      imza: "M4vLLBY/xxVfCPVLUmXEOEMNuKNwIhinrn8sxO9DspsIYS13G9LFvheoZIhehkV9+MhaDKlQC6MPOORx5AU+pbdwdueWv8DnjSsxOKkmXmwiMTUcumyXAA8ypuwrgGp5XsY7MH3bZ67Zs2Sca6zIKrB/+Bko80S/bjf1WF9JBBTQ8LE7/BLx3PPmuNEfNOh/sgy+WxECpbdlh9K/+dg+E9ctzyYXYqcSBh+5HgwvjbAw411nhI8Qjtfgbd8XQYYyhiFm0DPTm5j6AZ218w6OEprcZM/WXnkLLj5xSbvnxHqa8giuNC7/HvhA1Vjda609dd8DkupzqoghY9OSv5k60kmBJN/GUumrUjVieIEr6tmXOP7ay6uc+N6MkUFf82eP0IE2v5EAA/u+N2MMCnYoXNNm6ZWENjopWmSIBJL/4g7fFvyMGLnpxj/RzPzgjjtbHsDohTSAuqo12IdUIxC1kQFk9J2HgYeR3sx026oD76M/a4MFyGIhppaJExi4SpVYZf2hv5rbcaxy+GpIVSXRmqXka48Mtv4Ls9HFglg7WUvHk643pwTucBvq+5uWysXkJu6Qwn0lZeW3UtpJbiTTKY2pLlrjX3McZ4qh57X1CRx62XAnhj6fElipVH+wbWY3KVkVbH+c1RpcGIhC9aQAX32HIoCSYuW0kyYZLqt7l6Y="

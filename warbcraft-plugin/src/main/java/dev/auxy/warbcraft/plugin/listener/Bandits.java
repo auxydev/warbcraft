@@ -223,7 +223,7 @@ public final class Bandits {
         FieldDeployment.Stats stats = FieldDeployment.stats(troop);
         Skin skin = look == null ? Skin.NONE : look.skin();
         Optional<NPC> spawned = bodies.spawnHuman("<red>" + Msg.esc(troop.name()), true, at, skin,
-                SoldierKit.outfit(troop, look == null ? SoldierKit.color(troop.culture()) : look.color()), stats.maxHealth());
+                SoldierKit.outfit(troop), stats.maxHealth());
         if (spawned.isEmpty()) {
             return;
         }
@@ -311,6 +311,9 @@ public final class Bandits {
         private void attack(LivingEntity enemy) {
             target = enemy;
             for (Member member : members) {
+                if (!member.walker().isSpawned()) {
+                    continue;
+                }
                 Navigator navigator = member.walker().getNavigator();
                 if (navigator.getEntityTarget() == null || navigator.getEntityTarget().getTarget() != enemy) {
                     navigator.setTarget(enemy, true);
@@ -324,6 +327,9 @@ public final class Bandits {
             Block ground = ground(home.clone().add(Math.cos(angle) * distance, 0, Math.sin(angle) * distance));
             Location point = ground.getLocation().add(0.5, 1, 0.5);
             for (Member member : members) {
+                if (!member.walker().isSpawned()) {
+                    continue;
+                }
                 member.walker().getNavigator().setTarget(point.clone().add(random.nextDouble() * 3 - 1.5, 0, random.nextDouble() * 3 - 1.5));
             }
         }

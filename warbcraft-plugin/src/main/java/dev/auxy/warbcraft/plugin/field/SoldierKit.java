@@ -11,8 +11,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import java.util.Map;
 
 /**
- * Sahadaki askerin ve haydudun gorunumu: taraf rengi deri parcalarda, kademe arttikca zincir,
- * demir ve elmas. Yalnizca gorsel; savas degerleri cekirdekteki {@code FieldDeployment.stats} ile gelir.
+ * Sahadaki askerin ve haydudun donanimi: kademeye gore silah ve zirh, taraf rengi at zirhinda.
+ * Yalnizca gorsel; savas degerleri cekirdekteki {@code FieldDeployment.stats} ile gelir.
  */
 public final class SoldierKit {
 
@@ -35,27 +35,21 @@ public final class SoldierKit {
         return CULTURE_COLORS.getOrDefault(culture, Color.fromRGB(0x777777));
     }
 
-    /** Kultur renginde kiyafet (oyuncu askerleri). */
+    /**
+     * Kiyafet. Taraf skinden belli olur (kultur ya da haydut turu skini); zirh skinin ustune ancak
+     * kademe arttikca biner: 3'te zincir migfer, 4'te zincir govde, 5'te demir, 6'da elmas.
+     * Boylece acemi ile seckin asker uzaktan ayirt edilir ve skin gomulmez.
+     */
     public static Outfit outfit(TroopType troop) {
-        return outfit(troop, color(troop.culture()));
-    }
-
-    /** Verilen renkte kiyafet (haydut turleri kendi rengini tasir). */
-    public static Outfit outfit(TroopType troop, Color color) {
         int tier = troop.tier();
         ItemStack helmet = tier >= 6 ? item(Material.DIAMOND_HELMET)
                 : tier >= 4 ? item(Material.IRON_HELMET)
-                : tier >= 3 ? item(Material.CHAINMAIL_HELMET)
-                : leather(Material.LEATHER_HELMET, color);
+                : tier >= 3 ? item(Material.CHAINMAIL_HELMET) : null;
         ItemStack chest = tier >= 6 ? item(Material.DIAMOND_CHESTPLATE)
                 : tier >= 5 ? item(Material.IRON_CHESTPLATE)
-                : tier >= 4 ? item(Material.CHAINMAIL_CHESTPLATE)
-                : leather(Material.LEATHER_CHESTPLATE, color);
-        ItemStack legs = tier >= 4 ? item(Material.IRON_LEGGINGS)
-                : tier >= 3 ? item(Material.CHAINMAIL_LEGGINGS)
-                : tier >= 2 ? leather(Material.LEATHER_LEGGINGS, color) : null;
-        // Cizmeler hep taraf renginde: agir zirhli askerde de kimin adami oldugu belli olsun.
-        ItemStack boots = leather(Material.LEATHER_BOOTS, color);
+                : tier >= 4 ? item(Material.CHAINMAIL_CHESTPLATE) : null;
+        ItemStack legs = tier >= 5 ? item(Material.IRON_LEGGINGS) : null;
+        ItemStack boots = tier >= 5 ? item(Material.IRON_BOOTS) : null;
         boolean shield = troop.category() == TroopCategory.INFANTRY && tier >= 2;
         return new Outfit(helmet, chest, legs, boots, item(weapon(troop)), shield ? item(Material.SHIELD) : null);
     }
