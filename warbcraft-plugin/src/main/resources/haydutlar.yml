@@ -1,0 +1,51 @@
+# Dolaşan haydut çeteleri. Çete, doğduğu yerin biyomuna göre türünü seçer.
+# Birlikler birlikler.yml'deki "haydut" kültüründendir; NPC dengesi gereği en fazla kademe 4.
+# Skin: {oyuncu: <Minecraft kullanıcı adı>} ya da mineskin.org'dan {doku: ..., imza: ...}.
+
+cete:
+  deneme-araligi-saniye: 45     # her oyuncunun çevresinde bu kadar saniyede bir çete denemesi
+  olasilik: 0.35                # her denemede çete çıkma olasılığı
+  en-fazla-cete: 2              # bir oyuncunun çevresinde (96 blok) aynı anda en fazla çete
+  en-yakin: 32                  # oyuncuya en yakın doğma uzaklığı (blok)
+  en-uzak: 56                   # en uzak doğma uzaklığı
+  # Yerleşim sınırlarının içinde çete doğmaz.
+
+turler:
+  dag:
+    ad: Dağ Haydutları
+    renk: "#6B6B6B"
+    biyomlar: [windswept_hills, windswept_gravelly_hills, windswept_forest, stony_peaks, jagged_peaks,
+               frozen_peaks, snowy_slopes, grove, meadow]
+    birlikler: {haydut_dag: [2, 4], haydut_dag_reisi: [0, 1], haydut_orman: [0, 1]}
+    skin: {}
+  col:
+    ad: Çöl Akıncıları
+    renk: "#D2B48C"
+    biyomlar: [desert, badlands, eroded_badlands, wooded_badlands]
+    birlikler: {haydut_col: [2, 4], haydut_col_akinci: [1, 2]}
+    skin: {}
+  deniz:
+    ad: Deniz Haydutları
+    renk: "#1F3F5F"
+    biyomlar: [beach, snowy_beach, stony_shore, mangrove_swamp]
+    birlikler: {haydut_deniz: [2, 4], haydut_yagmaci: [1, 2]}
+    skin: {}
+  orman:
+    ad: Orman Eşkıyaları
+    renk: "#2F5A2F"
+    biyomlar: [forest, flower_forest, birch_forest, old_growth_birch_forest, dark_forest, taiga, snowy_taiga,
+               old_growth_pine_taiga, old_growth_spruce_taiga, jungle, sparse_jungle, bamboo_jungle, cherry_grove]
+    birlikler: {haydut_orman: [2, 3], haydut_yagmaci: [1, 3]}
+    skin: {}
+  bozkir:
+    ad: Bozkır Akıncıları
+    renk: "#8B6B3B"
+    biyomlar: [plains, sunflower_plains, savanna, savanna_plateau, windswept_savanna, snowy_plains]
+    birlikler: {haydut_bozkir: [1, 3], haydut_yagmaci: [1, 2]}
+    skin: {}
+  yagmaci:
+    ad: Yağmacılar
+    renk: "#5A4632"
+    biyomlar: ["*"]               # başka hiçbir türün tutmadığı biyomlar
+    birlikler: {haydut_yagmaci: [3, 5]}
+    skin: {}

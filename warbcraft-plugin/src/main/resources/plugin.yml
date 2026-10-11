@@ -5,6 +5,8 @@ api-version: '1.21'
 description: Mount & Blade tarzı ortaçağ sezonluk sunucu sistemi
 authors: [auxydev]
 website: https://github.com/auxydev/warbcraft
+# Citizens: askerler ve haydutlar skinli insan NPC'leridir. 1.21.1 icin Citizens 2.0.35 gerekir.
+depend: [Citizens]
 softdepend: [ViaVersion]
 
 commands:
@@ -48,7 +50,7 @@ commands:
     permission: warbcraft.oyuncu
   wbadmin:
     description: Warbcraft yönetimi
-    usage: /wbadmin <gun|kaydet|dinar|un|konum|haydut|savas|baris>
+    usage: /wbadmin <gun|kaydet|dinar|asker|un|konum|haydut|savas|baris>
     permission: warbcraft.admin
 
 permissions:

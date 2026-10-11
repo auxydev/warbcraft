@@ -50,8 +50,9 @@ Durum işaretleri: ✅ yapıldı (çekirdek + eklenti) · 🧪 çekirdekte hazı
 - ✅ Yaralılar ve günlük iyileşme.
 - ✅ Köy ve şehirlerden günlük gönüllü havuzuyla asker toplama (`/topla`). Düşman topraklarında
   toplanamaz.
-- ✅ **Askerler dünyada oyuncuyu takip eder.** Ek eklenti yok; kendi hafif NPC'lerimiz (Husk,
-  kültür rengi ve kademeye göre zırh, süvari atlı, okçular ok atar). Sahada en fazla
+- ✅ **Askerler dünyada oyuncuyu takip eder.** Skinli insan NPC'leri (Citizens; kültür başına skin
+  `birlikler.yml` içinde), kültür rengi ve kademeye göre zırh, süvari ata biner, okçular ok atar.
+  Yol bulamayan asker yerine ışınlanır. Sahada en fazla
   `oyun.sahada-asker` asker görünür (en yüksek kademe önce), gerisi yedektir. Düşen asker %30
   olasılıkla ölür, yoksa yaralanır; yerine yedekten biri çıkar. Öldürdükleri yaratık yığına
   deneyim yazar. Emirler: takip et, burada bekle, hücum; formasyon: sıra, kol, dağınık
@@ -111,9 +112,16 @@ Durum işaretleri: ✅ yapıldı (çekirdek + eklenti) · 🧪 çekirdekte hazı
 - 📋 Kervanlar, atölyeler, köy yağmalamanın pazara etkisi.
 
 ### Haydutlar
-- ✅ Etiketli yağmacı ve eşkıyalar (şimdilik yönetici çağırır: `/wbadmin haydut`). Öldürünce ödül,
-  ün ve görev ilerlemesi.
-- 🔜 Haydut kampları ve dolaşan haydut partileri (birlik ağacındaki `haydut` kültürü).
+- ✅ **Dolaşan haydut çeteleri** (`haydutlar.yml`): oyuncuların çevresinde, yerleşim dışında ara ara
+  doğar; türü biyomdan seçilir: dağ, çöl, deniz, orman, bozkır, diğer yerlerde yağmacılar. Her türün
+  kendi birlikleri, rengi ve skini vardır. Evinin çevresinde dolaşır, yakına gelen oyuncuya ya da
+  askerine saldırır, vurulana bütün çete döner, kimse yakında değilse dağılır. Kurallar çekirdekte
+  (`BanditSpawner`); haydut birlikleri NPC sınırı gereği en fazla kademe 4.
+- ✅ Öldürünce ödül, ün ve görev ilerlemesi; askerin öldürdüğü haydut da sayılır.
+- ✅ Yönetici: `/wbadmin haydut [tür]` yakına çete çağırır, `/wbadmin durum [oyuncu]` sahadaki
+  askerleri ve yakındaki çeteleri gösterir, `/wbadmin asker <oyuncu> <birlik> [adet]` partiye asker
+  ekler.
+- 🔜 Haydut kampları (çadır, ateş, ganimet; temizlenince bir süre sonra yeniden dolar).
 
 ## 4. Çok sürüm desteği
 
@@ -139,11 +147,16 @@ warbcraft-core     Saf Java 21. Bütün oyun kuralları. Sunucu API'sine bağım
   economy          Purse, Good, Market (arz-talep fiyatlaması)
   battle           AutoResolve (otomatik savaş çözümü)
   season           Season (evreler, savaş pencereleri, kuşatma ihbarı), SeasonScoreboard
+  field            FieldDeployment (sahaya kim çıkar, asker değerleri), FieldFormation, FieldOrder
+  bandit           BanditKind, BanditSpawner (biyoma göre tür, çete bileşimi, doğma kararı)
 
 warbcraft-plugin   Paper 1.21.1 eklentisi. Çekirdeği oyuna bağlar: komutlar, olaylar, kayıt, YAML verisi.
-  data             DataLoader (config/birlikler/dunya.yml), PlayerStore, StateStore (durum.yml)
-  command          /parti /topla /pazar /gorev /klan /krallik /sezon /dinar /wbadmin
-  listener         Giriş/çıkış, haydut ölümleri, sefer hizmeti
+  data             DataLoader (config/birlikler/dunya/haydutlar.yml), PlayerStore, StateStore (durum.yml)
+  command          /menu /parti /topla /pazar /gorev /klan /krallik /sezon /dinar /wbadmin
+  gui              Sandık menüleri (Sefer Defteri); işlemleri komutlara yaptırır
+  npc              NpcBodies (Citizens NPC'leri: skin, donanım, binek, vuruş), NpcTags
+  field            Retinue (oyuncunun sahadaki askerleri), SoldierKit (görünüş)
+  listener         Giriş/çıkış, haydut çeteleri (Bandits), haydut ölümleri, sefer hizmeti
 
 skript/            İçerik betikleri (karşılama, rehber, duyurular)
 ```
@@ -158,7 +171,7 @@ saha savaşı, NPC yapay zekâsı ve web paneli tarafından da kullanılabilir.
 | Çok sürüm | ViaVersion, ViaBackwards, ViaRewind | Zorunlu |
 | İzinler | LuckPerms | Rütbeler, VIP |
 | Bölge koruma | WorldGuard + WorldEdit | Başkentler ve harita yapımı |
-| Asker NPC'leri | Citizens (+ Sentinel) | 2. aşamada değerlendirilecek |
+| Asker ve haydut NPC'leri | Citizens 2.0.35 | Zorunlu. 1.21.1'i destekleyen son sürüm (derleme 3598); Sentinel gerekmez |
 | Özel modeller | ModelEngine, ItemsAdder ya da Nexo | Kuşatma silahları, sancaklar, zırhlar |
 | İçerik | Skript | Rehber, etkinlik, duyuru |
 | Harita | WorldPainter ya da Terra | Kıta ölçeğinde özel harita |

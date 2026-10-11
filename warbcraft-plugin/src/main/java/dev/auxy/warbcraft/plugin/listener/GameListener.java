@@ -5,6 +5,9 @@ import dev.auxy.warbcraft.core.quest.QuestType;
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
 import dev.auxy.warbcraft.plugin.field.Retinue;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -64,7 +67,7 @@ public final class GameListener implements Listener {
     public void onPlayerKill(PlayerDeathEvent event) {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
-        if (killer == null || killer.equals(victim)) {
+        if (killer == null || killer.equals(victim) || NpcTags.isAnyNpc(victim)) {
             return;
         }
         Optional<Clan> victimClan = game.clanOf(victim.getUniqueId());
@@ -77,5 +80,13 @@ public final class GameListener implements Listener {
             return;
         }
         game.progressQuest(killer, QuestType.WAR_SERVICE, victimKingdom, 1);
+    }
+
+    /** Vurulan haydudun cetesi saldirgana doner. */
+    @EventHandler(ignoreCancelled = true)
+    public void onBanditHit(EntityDamageByEntityEvent event) {
+        if (bandits.isBandit(event.getEntity()) && Retinue.resolve(event.getDamager()) instanceof LivingEntity attacker) {
+            bandits.onBanditAttacked(event.getEntity(), attacker);
+        }
     }
 }

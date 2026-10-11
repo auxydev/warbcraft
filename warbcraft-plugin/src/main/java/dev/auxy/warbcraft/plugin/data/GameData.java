@@ -17,6 +17,8 @@ import java.util.Map;
  * @param villageProduce  koy kimligi -> urettigi mal
  * @param garrisonSizes   sehir/kale kimligi -> taban garnizon boyutu
  * @param cultureNames    kultur kimligi -> gorunen ad
+ * @param cultureSkins    kultur kimligi -> askerlerin skini
+ * @param bandits         haydut cetesi turleri ve dogma ayarlari
  */
 public record GameData(
         TroopTree tree,
@@ -30,5 +32,7 @@ public record GameData(
         Map<String, SettlementSite> sites,
         Map<String, String> villageProduce,
         Map<String, Integer> garrisonSizes,
-        Map<String, String> cultureNames) {
+        Map<String, String> cultureNames,
+        Map<String, Skin> cultureSkins,
+        BanditData bandits) {
 }

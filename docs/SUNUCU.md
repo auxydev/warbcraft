@@ -46,6 +46,14 @@ değil ViaVersion'ı güncellemek yeterlidir.
 
 ## 5. Önerilen diğer eklentiler
 
+**Zorunlu:** Citizens 2.0.35 (derleme 3598): askerler ve haydutlar skinli insan NPC'leridir.
+Daha yeni Citizens sürümleri 1.21.1'i desteklemez. Deneme sunucusu (`baslat.bat`) onu kendisi indirir:
+<https://ci.citizensnpcs.co/job/Citizens2/3598/>
+
+**Eski kurulumu güncellerken:** `plugins/Warbcraft/birlikler.yml` dosyası kendiliğinden güncellenmez.
+Yeni haydut birlikleri (`haydut_dag`, `haydut_col` vb.) yoksa eklenti açılışta hangi birliğin eksik
+olduğunu söyler; dosyayı depodaki sürümle değiştir ya da eksik satırları ekle.
+
 LuckPerms (izinler), WorldGuard + WorldEdit (koruma ve harita), Skript (`skript/` klasöründeki
-betikler), CoreProtect (kayıt). Citizens ve ModelEngine sonraki aşamalarda gerekecek, ayrıntılar
+betikler), CoreProtect (kayıt). ModelEngine sonraki aşamalarda gerekecek, ayrıntılar
 [TASARIM.md](TASARIM.md) içinde.

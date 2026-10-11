@@ -19,6 +19,8 @@ import dev.auxy.warbcraft.plugin.data.StateStore;
 import dev.auxy.warbcraft.plugin.field.Retinue;
 import dev.auxy.warbcraft.plugin.field.RetinueListener;
 import dev.auxy.warbcraft.plugin.gui.Menus;
+import dev.auxy.warbcraft.plugin.npc.NpcBodies;
+import dev.auxy.warbcraft.plugin.npc.NpcTags;
 import dev.auxy.warbcraft.plugin.listener.Bandits;
 import dev.auxy.warbcraft.plugin.listener.GameListener;
 import org.bukkit.Location;
@@ -41,6 +43,7 @@ public final class WarbcraftPlugin extends JavaPlugin {
 
     private static final String TROOPS_FILE = "birlikler.yml";
     private static final String WORLD_FILE = "dunya.yml";
+    private static final String BANDITS_FILE = "haydutlar.yml";
     private static final String STATE_FILE = "durum.yml";
     private static final long AUTOSAVE_TICKS = 5 * 60 * 20L;
     /** {@code -Dwarbcraft.deneme=true}: yerel deneme sunucusu (gradlew runServer). */
@@ -51,19 +54,22 @@ public final class WarbcraftPlugin extends JavaPlugin {
 
     private Game game;
     private Retinue retinue;
+    private Bandits bandits;
+    private NpcBodies bodies;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         saveResourceIfMissing(TROOPS_FILE);
         saveResourceIfMissing(WORLD_FILE);
+        saveResourceIfMissing(BANDITS_FILE);
 
         if (TEST_MODE) {
             applyTestConfig();
         }
         GameData data;
         try {
-            data = DataLoader.load(getConfig(), dataFile(TROOPS_FILE), dataFile(WORLD_FILE));
+            data = DataLoader.load(getConfig(), dataFile(TROOPS_FILE), dataFile(WORLD_FILE), dataFile(BANDITS_FILE));
             archivePreviousSeason(data.season().number());
         } catch (RuntimeException e) {
             getLogger().log(Level.SEVERE, "Warbcraft başlatılamadı, eklenti kapatılıyor: " + e.getMessage(), e);
@@ -79,8 +85,10 @@ public final class WarbcraftPlugin extends JavaPlugin {
             placeSettlementsNearSpawn(data);
         }
 
-        Bandits bandits = new Bandits(this);
-        retinue = new Retinue(this, game, bandits);
+        bodies = new NpcBodies();
+        NpcTags tags = new NpcTags(this);
+        bandits = new Bandits(this, game, bodies, tags);
+        retinue = new Retinue(this, game, bodies, tags);
         ClanCommand clans = new ClanCommand(game);
         Menus menus = new Menus(this, game, retinue, clans);
         register("parti", new PartyCommand(game, retinue));
@@ -92,13 +100,14 @@ public final class WarbcraftPlugin extends JavaPlugin {
         register("sezon", new SeasonCommand(game));
         register("dinar", new DenarCommand(game));
         register("menu", new MenuCommand(game, menus::openMain));
-        register("wbadmin", new AdminCommand(game, this, bandits));
+        register("wbadmin", new AdminCommand(game, this, bandits, retinue));
         getServer().getPluginManager().registerEvents(new GameListener(game, bandits, retinue), this);
         getServer().getPluginManager().registerEvents(new RetinueListener(retinue, menus::openParty), this);
         getServer().getPluginManager().registerEvents(menus, this);
         getServer().getOnlinePlayers().forEach(game::profile);
         getServer().getOnlinePlayers().forEach(menus::giveJournal);
         retinue.start();
+        bandits.start();
 
         long dayTicks = data.settings().dayLengthMinutes() * 60L * 20L;
         getServer().getScheduler().runTaskTimer(this, () -> {
@@ -116,6 +125,12 @@ public final class WarbcraftPlugin extends JavaPlugin {
     public void onDisable() {
         if (retinue != null) {
             retinue.shutdown();
+        }
+        if (bandits != null) {
+            bandits.shutdown();
+        }
+        if (bodies != null) {
+            bodies.destroyAll();
         }
         if (game != null) {
             saveAll();

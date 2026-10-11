@@ -2,12 +2,16 @@
 # sinif: PIYADE | OKCU | SUVARI | ATLI_OKCU
 # guc: otomatik savaş hesabındaki güç · maas: günlük dinar · terfi-xp: asker başına terfi deneyimi
 
+# skin: askerlerin görünüşü. İki yol var:
+#   skin: {oyuncu: <Minecraft kullanıcı adı>}            o oyuncunun skini kullanılır
+#   skin: {doku: <value>, imza: <signature>}             mineskin.org'da yükleyip aldığın değerler
+# Boş bırakılırsa varsayılan Steve/Alex görünür.
 kulturler:
-  valdor: {ad: Valdor}        # batılı şövalyeler ve arbaletçiler
-  nordhem: {ad: Nordhem}      # kuzeyli kalkan duvarı ve baltacılar
-  aurelya: {ad: Aurelya}      # imparatorluk lejyonları ve katafraktlar
-  karahan: {ad: Karahan}      # bozkır atlı okçuları
-  haydut: {ad: Haydut}
+  valdor: {ad: Valdor, skin: {}}        # batılı şövalyeler ve arbaletçiler
+  nordhem: {ad: Nordhem, skin: {}}      # kuzeyli kalkan duvarı ve baltacılar
+  aurelya: {ad: Aurelya, skin: {}}      # imparatorluk lejyonları ve katafraktlar
+  karahan: {ad: Karahan, skin: {}}      # bozkır atlı okçuları
+  haydut: {ad: Haydut}                  # haydut skinleri haydutlar.yml'de, türe göre
 
 birlikler:
   # ---------------- VALDOR ----------------
@@ -54,7 +58,12 @@ birlikler:
   karahan_kesik:           {ad: Keşik,                kultur: karahan, kademe: 5, sinif: ATLI_OKCU, guc: 48, maas: 10}
 
   # ---------------- HAYDUTLAR (toplanamaz, terfi etmez) ----------------
+  # Çeteler haydutlar.yml'de kurulur. NPC dengesi gereği haydutlar en fazla kademe 4 olabilir.
   haydut_yagmaci:          {ad: Yağmacı,              kultur: haydut, kademe: 1, sinif: PIYADE,    guc: 7,  maas: 0}
   haydut_orman:            {ad: Orman Eşkıyası,       kultur: haydut, kademe: 2, sinif: OKCU,      guc: 14, maas: 0}
   haydut_bozkir:           {ad: Bozkır Akıncısı,      kultur: haydut, kademe: 2, sinif: ATLI_OKCU, guc: 15, maas: 0}
-  haydut_deniz:            {ad: Deniz Akıncısı,       kultur: haydut, kademe: 3, sinif: PIYADE,    guc: 22, maas: 0}
+  haydut_deniz:            {ad: Deniz Haydudu,        kultur: haydut, kademe: 3, sinif: PIYADE,    guc: 22, maas: 0}
+  haydut_dag:              {ad: Dağ Haydudu,          kultur: haydut, kademe: 2, sinif: PIYADE,    guc: 15, maas: 0}
+  haydut_dag_reisi:        {ad: Dağ Reisi,            kultur: haydut, kademe: 3, sinif: PIYADE,    guc: 24, maas: 0}
+  haydut_col:              {ad: Çöl Eşkıyası,         kultur: haydut, kademe: 2, sinif: PIYADE,    guc: 14, maas: 0}
+  haydut_col_akinci:       {ad: Çöl Akıncısı,         kultur: haydut, kademe: 3, sinif: SUVARI,    guc: 23, maas: 0}

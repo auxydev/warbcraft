@@ -1,5 +1,7 @@
 package dev.auxy.warbcraft.plugin.data;
 
+import dev.auxy.warbcraft.core.bandit.BanditKind;
+import dev.auxy.warbcraft.core.bandit.BanditSpawner;
 import dev.auxy.warbcraft.core.economy.Good;
 import dev.auxy.warbcraft.core.faction.Clan;
 import dev.auxy.warbcraft.core.faction.Kingdom;
@@ -13,7 +15,10 @@ import dev.auxy.warbcraft.core.season.WarWindow;
 import dev.auxy.warbcraft.core.troop.TroopCategory;
 import dev.auxy.warbcraft.core.troop.TroopTree;
 import dev.auxy.warbcraft.core.troop.TroopType;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -46,19 +51,27 @@ public final class DataLoader {
             Map.entry("cumartesi", DayOfWeek.SATURDAY),
             Map.entry("pazar", DayOfWeek.SUNDAY));
 
+    /** Haydut birliklerinin kulturu; toplanamaz, kralliga kultur olarak secilemez. */
+    public static final String BANDIT_CULTURE = "haydut";
+
     private DataLoader() {
     }
 
-    public static GameData load(FileConfiguration config, File troopsFile, File worldFile) {
+    public static GameData load(FileConfiguration config, File troopsFile, File worldFile, File banditsFile) {
         YamlConfiguration troopsYaml = YamlConfiguration.loadConfiguration(troopsFile);
         YamlConfiguration worldYaml = YamlConfiguration.loadConfiguration(worldFile);
+        YamlConfiguration banditsYaml = YamlConfiguration.loadConfiguration(banditsFile);
 
         Map<String, String> cultureNames = new LinkedHashMap<>();
+        Map<String, Skin> cultureSkins = new LinkedHashMap<>();
         ConfigurationSection cultures = section(troopsYaml, "kulturler");
         for (String id : cultures.getKeys(false)) {
             cultureNames.put(id, cultures.getString(id + ".ad", id));
+            cultureSkins.put(id, Skin.parse(cultures.getConfigurationSection(id + ".skin"), "kulturler." + id + ".skin"));
         }
         TroopTree tree = loadTroops(section(troopsYaml, "birlikler"), cultureNames);
+        NpcBalance balance = loadBalance(section(config, "npc-denge"));
+        BanditData bandits = loadBandits(banditsYaml, tree, balance);
 
         Map<String, Good> goods = new LinkedHashMap<>();
         Map<String, Material> goodItems = new LinkedHashMap<>();
@@ -134,9 +147,67 @@ public final class DataLoader {
             }
         }
 
-        return new GameData(tree, realm, loadSeason(section(config, "sezon")), loadBalance(section(config, "npc-denge")),
+        return new GameData(tree, realm, loadSeason(section(config, "sezon")), balance,
                 loadSettings(section(config, "oyun")), kings, goods, goodItems, sites, villageProduce,
-                garrisonSizes, cultureNames);
+                garrisonSizes, cultureNames, cultureSkins, bandits);
+    }
+
+    /**
+     * Haydut turleri. Dogrulama: birlikler tanimli ve "haydut" kulturunden, kademeleri NPC dengesinin
+     * izin verdigi en yuksek kademeyi asmaz (haydutlar oyunculardan guclu olamaz), tam bir "*" turu var.
+     */
+    private static BanditData loadBandits(YamlConfiguration yaml, TroopTree tree, NpcBalance balance) {
+        ConfigurationSection s = section(yaml, "cete");
+        BanditSpawner.Settings settings = new BanditSpawner.Settings(
+                s.getInt("deneme-araligi-saniye", 45), s.getDouble("olasilik", 0.35), s.getInt("en-fazla-cete", 2),
+                s.getInt("en-yakin", 32), s.getInt("en-uzak", 56));
+        Map<String, BanditKind> kinds = new LinkedHashMap<>();
+        Map<String, BanditData.Look> looks = new LinkedHashMap<>();
+        ConfigurationSection types = section(yaml, "turler");
+        for (String id : types.getKeys(false)) {
+            ConfigurationSection t = section(types, id);
+            String path = "turler." + id;
+            Map<String, BanditKind.Range> roster = new LinkedHashMap<>();
+            ConfigurationSection troops = section(t, "birlikler");
+            for (String troopId : troops.getKeys(false)) {
+                TroopType troop = tree.find(troopId).orElseThrow(() ->
+                        new IllegalArgumentException(path + ": bilinmeyen birlik " + troopId));
+                if (!troop.culture().equals(BANDIT_CULTURE)) {
+                    throw new IllegalArgumentException(path + ": " + troopId + " haydut kulturunden degil");
+                }
+                if (troop.tier() > balance.maxLordTroopTier()) {
+                    throw new IllegalArgumentException(path + ": " + troopId + " kademesi NPC siniri "
+                            + balance.maxLordTroopTier() + "'u asiyor");
+                }
+                List<Integer> range = troops.getIntegerList(troopId);
+                if (range.size() != 2) {
+                    throw new IllegalArgumentException(path + ".birlikler." + troopId + ": [en-az, en-cok] olmali");
+                }
+                roster.put(troopId, new BanditKind.Range(range.get(0), range.get(1)));
+            }
+            List<String> biomes = t.getStringList("biyomlar");
+            for (String biome : biomes) {
+                if (!biome.equals(BanditKind.ANY_BIOME)
+                        && Registry.BIOME.get(NamespacedKey.minecraft(biome.toLowerCase(Locale.ROOT))) == null) {
+                    throw new IllegalArgumentException(path + ": bilinmeyen biyom " + biome);
+                }
+            }
+            kinds.put(id, new BanditKind(id, require(t, "ad"), Set.copyOf(biomes), roster));
+            looks.put(id, new BanditData.Look(color(t.getString("renk", "#5A4632"), path + ".renk"),
+                    Skin.parse(t.getConfigurationSection("skin"), path + ".skin")));
+        }
+        if (kinds.values().stream().noneMatch(BanditKind::isFallback)) {
+            throw new IllegalArgumentException("haydutlar.yml: biyomlar: [\"*\"] olan bir tur gerekli");
+        }
+        return new BanditData(settings, kinds, looks);
+    }
+
+    private static Color color(String hex, String path) {
+        try {
+            return Color.fromRGB(Integer.parseInt(hex.replace("#", ""), 16));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(path + ": renk #RRGGBB olmali: " + hex, e);
+        }
     }
 
     private static TroopTree loadTroops(ConfigurationSection section, Map<String, String> cultures) {

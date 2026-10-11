@@ -2,8 +2,19 @@ plugins {
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
+repositories {
+    maven("https://maven.citizensnpcs.co/repo")
+}
+
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    // Skinli insan NPC'ler (askerler, haydutlar). 2.0.35, Minecraft 1.21.1'i destekleyen son surumdur.
+    compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT") {
+        exclude(group = "*", module = "*")
+    }
+    compileOnly("net.citizensnpcs:citizensapi:2.0.35-SNAPSHOT") {
+        exclude(group = "*", module = "*")
+    }
     implementation(project(":warbcraft-core"))
 }
 
@@ -34,6 +45,8 @@ tasks.runServer {
     jvmArgs("-Dwarbcraft.deneme=true", "-Dfile.encoding=UTF-8", "-Xms1G", "-Xmx2G")
     // Her surumden istemci baglanabilsin.
     downloadPlugins {
+        // Citizens 2.0.35 (derleme 3598): Minecraft 1.21.1'i destekleyen son surum.
+        url("https://ci.citizensnpcs.co/job/Citizens2/3598/artifact/dist/target/Citizens-2.0.35-b3598.jar")
         url("https://github.com/ViaVersion/ViaVersion/releases/download/5.12.1/ViaVersion-5.12.1.jar")
         url("https://github.com/ViaVersion/ViaBackwards/releases/download/5.12.1/ViaBackwards-5.12.1.jar")
         url("https://github.com/ViaVersion/ViaRewind/releases/download/4.2.0/ViaRewind-4.2.0.jar")

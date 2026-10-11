@@ -2,6 +2,7 @@ package dev.auxy.warbcraft.plugin.gui;
 
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.data.DataLoader;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ final class CulturePickerMenu extends Menu {
         Game game = menus.game();
         int slot = 10;
         for (Map.Entry<String, String> culture : game.data().cultureNames().entrySet()) {
-            if (game.tree().recruits(culture.getKey()).isEmpty()) {
+            if (culture.getKey().equals(DataLoader.BANDIT_CULTURE) || game.tree().recruits(culture.getKey()).isEmpty()) {
                 continue;
             }
             String id = culture.getKey();

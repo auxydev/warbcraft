@@ -8,6 +8,7 @@ import dev.auxy.warbcraft.core.npc.NpcKing;
 import dev.auxy.warbcraft.core.party.Party;
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.data.DataLoader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -128,8 +129,9 @@ public final class KingdomCommand extends BaseCommand {
         String usage = "/" + label + " kur <kultur> <ad>";
         String culture = arg(args, 1, usage);
         String name = joinFrom(args, 2, usage);
-        if (!game.data().cultureNames().containsKey(culture)) {
-            throw new CommandError("Kültürler: " + String.join(", ", game.data().cultureNames().keySet()));
+        if (!game.data().cultureNames().containsKey(culture) || culture.equals(DataLoader.BANDIT_CULTURE)) {
+            throw new CommandError("Kültürler: " + String.join(", ", game.data().cultureNames().keySet().stream()
+                    .filter(c -> !c.equals(DataLoader.BANDIT_CULTURE)).toList()));
         }
         Clan clan = ledClan(player);
         if (clan.kingdomId() != null) {

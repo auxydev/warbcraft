@@ -6,6 +6,7 @@ import dev.auxy.warbcraft.core.faction.Settlement;
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
 import dev.auxy.warbcraft.plugin.WarbcraftPlugin;
+import dev.auxy.warbcraft.plugin.field.Retinue;
 import dev.auxy.warbcraft.plugin.listener.Bandits;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -19,15 +20,17 @@ import java.util.Locale;
 public final class AdminCommand extends BaseCommand {
 
     private static final List<String> SUBCOMMANDS =
-            List.of("gun", "kaydet", "dinar", "un", "konum", "haydut", "savas", "baris");
+            List.of("gun", "kaydet", "dinar", "asker", "durum", "un", "konum", "haydut", "savas", "baris");
 
     private final WarbcraftPlugin plugin;
     private final Bandits bandits;
+    private final Retinue retinue;
 
-    public AdminCommand(Game game, WarbcraftPlugin plugin, Bandits bandits) {
+    public AdminCommand(Game game, WarbcraftPlugin plugin, Bandits bandits, Retinue retinue) {
         super(game);
         this.plugin = plugin;
         this.bandits = bandits;
+        this.retinue = retinue;
     }
 
     @Override
@@ -49,6 +52,30 @@ public final class AdminCommand extends BaseCommand {
                 game.purse(target).deposit(amount);
                 Msg.ok(sender, Msg.esc(target.getName()) + " +" + amount + " dinar.");
             }
+            case "asker" -> {
+                String usage = "/" + label + " asker <oyuncu> <birlik> [adet]";
+                Player target = online(arg(args, 1, usage));
+                String troopId = arg(args, 2, usage);
+                if (game.tree().find(troopId).isEmpty()) {
+                    throw new CommandError("Bilinmeyen birlik: " + Msg.esc(troopId));
+                }
+                int amount = args.length > 3 ? positiveInt(args[3], "Adet") : 1;
+                int added = game.profile(target).party().addTroops(troopId, amount);
+                Msg.ok(sender, Msg.esc(target.getName()) + " partisine " + added + " " + Msg.esc(game.tree().get(troopId).name())
+                        + " eklendi" + (added < amount ? " (parti sınırı doldu)." : "."));
+            }
+            case "durum" -> {
+                Player target = args.length > 1 ? online(args[1]) : player(sender);
+                Msg.info(sender, "<gold>" + Msg.esc(target.getName()) + "</gold> · sahada " + retinue.fieldCount(target)
+                        + " asker · emir " + retinue.order(target).displayName()
+                        + " · parti " + game.profile(target).party().totalCount()
+                        + " · ortalama uzaklık " + String.format(Locale.ROOT, "%.1f", retinue.averageDistance(target)));
+                List<String> gangs = bandits.describeNear(target.getLocation(), 128);
+                if (gangs.isEmpty()) {
+                    Msg.line(sender, "  Yakında haydut çetesi yok.");
+                }
+                gangs.forEach(line -> Msg.line(sender, "  " + line));
+            }
             case "un" -> {
                 String usage = "/" + label + " un <oyuncu> <miktar>";
                 Player target = online(arg(args, 1, usage));
@@ -69,8 +96,12 @@ public final class AdminCommand extends BaseCommand {
             }
             case "haydut" -> {
                 Player player = player(sender);
-                int amount = args.length > 1 ? positiveInt(args[1], "Adet") : 5;
-                Msg.ok(sender, bandits.spawnGroup(player.getLocation(), Math.min(amount, 30)) + " haydut doğdu.");
+                String kind = args.length > 1 ? args[1].toLowerCase(Locale.ROOT) : null;
+                if (kind != null && !bandits.kindIds().contains(kind)) {
+                    throw new CommandError("Haydut türleri: " + String.join(", ", bandits.kindIds()));
+                }
+                int spawned = bandits.spawnNear(player.getLocation(), kind);
+                Msg.ok(sender, spawned + " kişilik bir haydut çetesi yakında belirdi.");
             }
             case "savas", "baris" -> {
                 String usage = "/" + label + " " + sub + " <krallik> <krallik>";
@@ -107,8 +138,14 @@ public final class AdminCommand extends BaseCommand {
             return complete(SUBCOMMANDS, args[0]);
         }
         String sub = args[0].toLowerCase(Locale.ROOT);
-        if (args.length == 2 && (sub.equals("dinar") || sub.equals("un"))) {
+        if (args.length == 3 && sub.equals("asker")) {
+            return complete(game.tree().all().stream().map(t -> t.id()).toList(), args[2]);
+        }
+        if (args.length == 2 && (sub.equals("dinar") || sub.equals("un") || sub.equals("asker") || sub.equals("durum"))) {
             return complete(Bukkit.getOnlinePlayers().stream().map(Player::getName).toList(), args[1]);
+        }
+        if (args.length == 2 && sub.equals("haydut")) {
+            return complete(bandits.kindIds(), args[1]);
         }
         if (args.length == 2 && sub.equals("konum")) {
             return complete(game.realm().settlements().stream().map(Settlement::id).toList(), args[1]);

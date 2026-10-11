@@ -5,16 +5,14 @@ import dev.auxy.warbcraft.core.troop.TroopType;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Horse;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.Map;
 
 /**
- * Sahadaki askerin gorunumu: kultur rengi deri parcalarda, kademe arttikca zincir, demir ve elmas.
- * Yalnizca gorsel; savas degerleri cekirdekteki {@code FieldDeployment.stats} ile gelir.
+ * Sahadaki askerin ve haydudun gorunumu: taraf rengi deri parcalarda, kademe arttikca zincir,
+ * demir ve elmas. Yalnizca gorsel; savas degerleri cekirdekteki {@code FieldDeployment.stats} ile gelir.
  */
 public final class SoldierKit {
 
@@ -28,44 +26,49 @@ public final class SoldierKit {
     private SoldierKit() {
     }
 
+    /** Bir NPC'nin giyecegi parcalar; bos yuva {@code null}. */
+    public record Outfit(ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots,
+                         ItemStack mainHand, ItemStack offHand) {
+    }
+
     public static Color color(String culture) {
         return CULTURE_COLORS.getOrDefault(culture, Color.fromRGB(0x777777));
     }
 
-    static void dress(EntityEquipment equipment, TroopType troop) {
-        int tier = troop.tier();
-        Color color = color(troop.culture());
-        equipment.setHelmet(tier >= 6 ? item(Material.DIAMOND_HELMET)
-                : tier >= 4 ? item(Material.IRON_HELMET)
-                : tier >= 3 ? item(Material.CHAINMAIL_HELMET)
-                : tier >= 2 ? leather(Material.LEATHER_HELMET, color) : null);
-        equipment.setChestplate(tier >= 6 ? item(Material.DIAMOND_CHESTPLATE)
-                : tier >= 5 ? item(Material.IRON_CHESTPLATE)
-                : tier >= 4 ? item(Material.CHAINMAIL_CHESTPLATE)
-                : leather(Material.LEATHER_CHESTPLATE, color));
-        equipment.setLeggings(tier >= 4 ? item(Material.IRON_LEGGINGS)
-                : tier >= 3 ? item(Material.CHAINMAIL_LEGGINGS)
-                : tier >= 2 ? leather(Material.LEATHER_LEGGINGS, color) : null);
-        // Cizmeler hep kultur renginde: agir zirhli askerde de taraf belli olsun.
-        equipment.setBoots(leather(Material.LEATHER_BOOTS, color));
-        equipment.setItemInMainHand(item(weapon(troop)));
-        boolean shield = troop.category() == TroopCategory.INFANTRY && tier >= 2;
-        equipment.setItemInOffHand(shield ? item(Material.SHIELD) : null);
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot != EquipmentSlot.BODY) {
-                equipment.setDropChance(slot, 0f);
-            }
-        }
+    /** Kultur renginde kiyafet (oyuncu askerleri). */
+    public static Outfit outfit(TroopType troop) {
+        return outfit(troop, color(troop.culture()));
     }
 
-    static void dressHorse(Horse horse, TroopType troop) {
+    /** Verilen renkte kiyafet (haydut turleri kendi rengini tasir). */
+    public static Outfit outfit(TroopType troop, Color color) {
         int tier = troop.tier();
-        horse.getInventory().setSaddle(item(Material.SADDLE));
-        horse.getInventory().setArmor(tier >= 6 ? item(Material.DIAMOND_HORSE_ARMOR)
+        ItemStack helmet = tier >= 6 ? item(Material.DIAMOND_HELMET)
+                : tier >= 4 ? item(Material.IRON_HELMET)
+                : tier >= 3 ? item(Material.CHAINMAIL_HELMET)
+                : leather(Material.LEATHER_HELMET, color);
+        ItemStack chest = tier >= 6 ? item(Material.DIAMOND_CHESTPLATE)
+                : tier >= 5 ? item(Material.IRON_CHESTPLATE)
+                : tier >= 4 ? item(Material.CHAINMAIL_CHESTPLATE)
+                : leather(Material.LEATHER_CHESTPLATE, color);
+        ItemStack legs = tier >= 4 ? item(Material.IRON_LEGGINGS)
+                : tier >= 3 ? item(Material.CHAINMAIL_LEGGINGS)
+                : tier >= 2 ? leather(Material.LEATHER_LEGGINGS, color) : null;
+        // Cizmeler hep taraf renginde: agir zirhli askerde de kimin adami oldugu belli olsun.
+        ItemStack boots = leather(Material.LEATHER_BOOTS, color);
+        boolean shield = troop.category() == TroopCategory.INFANTRY && tier >= 2;
+        return new Outfit(helmet, chest, legs, boots, item(weapon(troop)), shield ? item(Material.SHIELD) : null);
+    }
+
+    public static ItemStack horseArmor(TroopType troop, Color color) {
+        int tier = troop.tier();
+        return tier >= 6 ? item(Material.DIAMOND_HORSE_ARMOR)
                 : tier >= 4 ? item(Material.IRON_HORSE_ARMOR)
-                : leather(Material.LEATHER_HORSE_ARMOR, color(troop.culture())));
-        horse.setColor(tier >= 5 ? Horse.Color.WHITE : Horse.Color.BROWN);
-        horse.setStyle(Horse.Style.NONE);
+                : leather(Material.LEATHER_HORSE_ARMOR, color);
+    }
+
+    public static Horse.Color horseColor(TroopType troop) {
+        return troop.tier() >= 5 ? Horse.Color.WHITE : troop.culture().equals("haydut") ? Horse.Color.DARK_BROWN : Horse.Color.BROWN;
     }
 
     /** Menu simgesi icin de kullanilir. */
@@ -74,7 +77,7 @@ public final class SoldierKit {
         if (troop.category().isRanged()) {
             return troop.culture().equals("valdor") ? Material.CROSSBOW : Material.BOW;
         }
-        boolean axes = troop.culture().equals("nordhem");
+        boolean axes = troop.culture().equals("nordhem") || troop.culture().equals("haydut");
         if (tier >= 5) {
             return axes ? Material.DIAMOND_AXE : Material.DIAMOND_SWORD;
         }
@@ -87,7 +90,7 @@ public final class SoldierKit {
         return axes ? Material.WOODEN_AXE : Material.WOODEN_SWORD;
     }
 
-    private static ItemStack item(Material material) {
+    static ItemStack item(Material material) {
         return new ItemStack(material);
     }
 
