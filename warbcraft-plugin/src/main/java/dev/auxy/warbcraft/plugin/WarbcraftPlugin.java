@@ -6,6 +6,7 @@ import dev.auxy.warbcraft.plugin.command.ClanCommand;
 import dev.auxy.warbcraft.plugin.command.DenarCommand;
 import dev.auxy.warbcraft.plugin.command.KingdomCommand;
 import dev.auxy.warbcraft.plugin.command.MarketCommand;
+import dev.auxy.warbcraft.plugin.command.MenuCommand;
 import dev.auxy.warbcraft.plugin.command.PartyCommand;
 import dev.auxy.warbcraft.plugin.command.QuestCommand;
 import dev.auxy.warbcraft.plugin.command.RecruitCommand;
@@ -15,6 +16,9 @@ import dev.auxy.warbcraft.plugin.data.GameData;
 import dev.auxy.warbcraft.plugin.data.PlayerStore;
 import dev.auxy.warbcraft.plugin.data.SettlementSite;
 import dev.auxy.warbcraft.plugin.data.StateStore;
+import dev.auxy.warbcraft.plugin.field.Retinue;
+import dev.auxy.warbcraft.plugin.field.RetinueListener;
+import dev.auxy.warbcraft.plugin.gui.Menus;
 import dev.auxy.warbcraft.plugin.listener.Bandits;
 import dev.auxy.warbcraft.plugin.listener.GameListener;
 import org.bukkit.Location;
@@ -42,8 +46,11 @@ public final class WarbcraftPlugin extends JavaPlugin {
     /** {@code -Dwarbcraft.deneme=true}: yerel deneme sunucusu (gradlew runServer). */
     private static final boolean TEST_MODE = Boolean.getBoolean("warbcraft.deneme");
     private static final int TEST_SITE_SPACING = 120;
+    /** dunya.yml'de konumun /wbadmin konum ile elle verildigini gosteren anahtar. */
+    private static final String MANUAL_SITE = "elle";
 
     private Game game;
+    private Retinue retinue;
 
     @Override
     public void onEnable() {
@@ -73,17 +80,25 @@ public final class WarbcraftPlugin extends JavaPlugin {
         }
 
         Bandits bandits = new Bandits(this);
-        register("parti", new PartyCommand(game));
+        retinue = new Retinue(this, game, bandits);
+        ClanCommand clans = new ClanCommand(game);
+        Menus menus = new Menus(this, game, retinue, clans);
+        register("parti", new PartyCommand(game, retinue));
         register("topla", new RecruitCommand(game));
         register("pazar", new MarketCommand(game));
         register("gorev", new QuestCommand(game));
-        register("klan", new ClanCommand(game));
+        register("klan", clans);
         register("krallik", new KingdomCommand(game));
         register("sezon", new SeasonCommand(game));
         register("dinar", new DenarCommand(game));
+        register("menu", new MenuCommand(game, menus::openMain));
         register("wbadmin", new AdminCommand(game, this, bandits));
-        getServer().getPluginManager().registerEvents(new GameListener(game, bandits), this);
+        getServer().getPluginManager().registerEvents(new GameListener(game, bandits, retinue), this);
+        getServer().getPluginManager().registerEvents(new RetinueListener(retinue, menus::openParty), this);
+        getServer().getPluginManager().registerEvents(menus, this);
         getServer().getOnlinePlayers().forEach(game::profile);
+        getServer().getOnlinePlayers().forEach(menus::giveJournal);
+        retinue.start();
 
         long dayTicks = data.settings().dayLengthMinutes() * 60L * 20L;
         getServer().getScheduler().runTaskTimer(this, () -> {
@@ -99,6 +114,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (retinue != null) {
+            retinue.shutdown();
+        }
         if (game != null) {
             saveAll();
         }
@@ -126,6 +144,7 @@ public final class WarbcraftPlugin extends JavaPlugin {
         yaml.set(path + ".y", location.getBlockY());
         yaml.set(path + ".z", location.getBlockZ());
         yaml.set(path + ".yaricap", radius);
+        yaml.set(path + "." + MANUAL_SITE, true);
         try {
             yaml.save(file);
         } catch (IOException e) {
@@ -151,12 +170,21 @@ public final class WarbcraftPlugin extends JavaPlugin {
         getLogger().warning("DENEME MODU: sezon başlamış, savaş penceresi hep açık, başlangıç parası 10000.");
     }
 
-    /** Deneme modu: tum yerlesimleri spawn cevresine 5 sutunluk bir izgaraya dizer (dosyaya yazmaz). */
+    /**
+     * Deneme modu: yerlesimleri spawn cevresine 5 sutunluk bir izgaraya dizer (dosyaya yazmaz).
+     * {@code /wbadmin konum} ile elle konulanlar yerinde kalir.
+     */
     private void placeSettlementsNearSpawn(GameData data) {
         Location spawn = getServer().getWorlds().getFirst().getSpawnLocation();
         String world = Objects.requireNonNull(spawn.getWorld(), "world").getName();
+        YamlConfiguration worldYaml = YamlConfiguration.loadConfiguration(dataFile(WORLD_FILE));
         int index = 0;
         for (Settlement settlement : data.realm().settlements()) {
+            if (worldYaml.getBoolean("yerlesimler." + settlement.id() + ".konum." + MANUAL_SITE)) {
+                getLogger().info("Elle konulmuş, yerinde kalıyor: " + settlement.name());
+                index++;
+                continue;
+            }
             int x = spawn.getBlockX() + (index % 5) * TEST_SITE_SPACING;
             int z = spawn.getBlockZ() + (index / 5) * TEST_SITE_SPACING;
             data.sites().put(settlement.id(), new SettlementSite(settlement.id(), world, x, spawn.getBlockY(), z, 50));

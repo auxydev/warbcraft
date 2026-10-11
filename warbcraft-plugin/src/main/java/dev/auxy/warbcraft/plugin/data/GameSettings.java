@@ -10,6 +10,7 @@ package dev.auxy.warbcraft.plugin.data;
  * @param clanCost          klan kurma ucreti
  * @param kingdomMinClanTier krallik kurmak icin gereken klan kademesi
  * @param vassalMinRelation NPC kralliga bagli olmak icin kralla gereken iliski
+ * @param fieldCap          bir oyuncunun dunyada ayni anda gorunen en fazla askeri
  */
 public record GameSettings(
         int dayLengthMinutes,
@@ -18,5 +19,6 @@ public record GameSettings(
         int banditBounty,
         int clanCost,
         int kingdomMinClanTier,
-        int vassalMinRelation) {
+        int vassalMinRelation,
+        int fieldCap) {
 }

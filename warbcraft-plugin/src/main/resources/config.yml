@@ -35,3 +35,4 @@ oyun:
   klan-kurma-ucreti: 2000
   krallik-icin-klan-kademesi: 2
   vasal-icin-iliski: 10              # NPC kralın sancağı altına girmek için gereken ilişki
+  sahada-asker: 12                   # oyuncunun arkasında yürüyen en fazla asker; gerisi yedekte (performans)

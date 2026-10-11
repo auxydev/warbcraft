@@ -4,6 +4,7 @@ import dev.auxy.warbcraft.core.faction.Clan;
 import dev.auxy.warbcraft.core.quest.QuestType;
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.field.Retinue;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,10 +21,12 @@ public final class GameListener implements Listener {
 
     private final Game game;
     private final Bandits bandits;
+    private final Retinue retinue;
 
-    public GameListener(Game game, Bandits bandits) {
+    public GameListener(Game game, Bandits bandits, Retinue retinue) {
         this.game = game;
         this.bandits = bandits;
+        this.retinue = retinue;
     }
 
     @EventHandler
@@ -36,10 +39,17 @@ public final class GameListener implements Listener {
         game.players().unload(event.getPlayer().getUniqueId());
     }
 
+    /** Haydudu oyuncu ya da onun askeri oldurduyse odul oyuncuya yazilir. */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBanditDeath(EntityDeathEvent event) {
+        if (!bandits.isBandit(event.getEntity())) {
+            return;
+        }
         Player killer = event.getEntity().getKiller();
-        if (killer == null || !bandits.isBandit(event.getEntity())) {
+        if (killer == null) {
+            killer = Retinue.lastDamager(event.getEntity()).flatMap(retinue::commander).orElse(null);
+        }
+        if (killer == null) {
             return;
         }
         int bounty = game.data().settings().banditBounty();

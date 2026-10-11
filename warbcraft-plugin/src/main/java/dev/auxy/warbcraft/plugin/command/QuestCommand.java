@@ -133,6 +133,11 @@ public final class QuestCommand extends BaseCommand {
     }
 
     private String describe(QuestOffer offer) {
+        return describe(game, offer);
+    }
+
+    /** Gorevin tek satirlik MiniMessage ozeti (sohbet ve menu). */
+    public static String describe(Game game, QuestOffer offer) {
         String what = switch (offer.type()) {
             case HUNT_BANDITS -> offer.required() + " haydut öldür";
             case DELIVER_GOODS -> offer.required() + " " + Msg.esc(game.data().goods().containsKey(offer.target())

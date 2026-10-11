@@ -192,9 +192,13 @@ public final class DataLoader {
                 s.getInt("haydut-odulu", 15),
                 s.getInt("klan-kurma-ucreti", 2000),
                 s.getInt("krallik-icin-klan-kademesi", 2),
-                s.getInt("vasal-icin-iliski", 10));
+                s.getInt("vasal-icin-iliski", 10),
+                s.getInt("sahada-asker", 12));
         if (settings.dayLengthMinutes() <= 0) {
             throw new IllegalArgumentException("oyun.gun-uzunlugu-dakika pozitif olmali");
+        }
+        if (settings.fieldCap() < 0) {
+            throw new IllegalArgumentException("oyun.sahada-asker negatif olamaz");
         }
         return settings;
     }

@@ -6,12 +6,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 /** Envanterde ticaret malı sayma/alma/verme. Yalnizca ozel verisi olmayan sade esyalar sayilir. */
-final class Items {
+public final class Items {
 
     private Items() {
     }
 
-    static int count(Player player, Material material) {
+    public static int count(Player player, Material material) {
         int total = 0;
         for (ItemStack item : player.getInventory().getStorageContents()) {
             if (isPlain(item, material)) {
@@ -22,7 +22,7 @@ final class Items {
     }
 
     /** @return alinan miktar */
-    static int take(Player player, Material material, int amount) {
+    public static int take(Player player, Material material, int amount) {
         PlayerInventory inventory = player.getInventory();
         ItemStack[] contents = inventory.getStorageContents();
         int left = amount;
@@ -41,7 +41,7 @@ final class Items {
     }
 
     /** Envantere sigmayanlar oyuncunun ayagina birakilir. */
-    static void give(Player player, Material material, int amount) {
+    public static void give(Player player, Material material, int amount) {
         int left = amount;
         while (left > 0) {
             int stack = Math.min(left, material.getMaxStackSize());

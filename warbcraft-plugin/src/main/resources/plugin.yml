@@ -8,9 +8,14 @@ website: https://github.com/auxydev/warbcraft
 softdepend: [ViaVersion]
 
 commands:
+  menu:
+    description: Sefer Defteri, tüm sistemlerin menüsü
+    usage: /menu
+    aliases: [wb, warbcraft, defter]
+    permission: warbcraft.oyuncu
   parti:
     description: Partini (ordunu) gösterir, asker terfi ettirir veya terhis eder
-    usage: /parti [terfi <birlik> <hedef> [adet] | terhis <birlik> <adet>]
+    usage: /parti [terfi <birlik> <hedef> [adet] | terhis <birlik> <adet> | emir <takip|bekle|hucum> | formasyon [sira|kol|daginik] | saha]
     aliases: [ordu]
     permission: warbcraft.oyuncu
   topla:

@@ -28,6 +28,11 @@ public final class ClanCommand extends BaseCommand {
         super(game);
     }
 
+    /** Oyuncunun bekleyen klan davetleri (menude gosterilir). */
+    public Set<String> invitesFor(UUID playerId) {
+        return Set.copyOf(invites.getOrDefault(playerId, Set.of()));
+    }
+
     @Override
     protected void execute(CommandSender sender, String label, String[] args) {
         Player player = player(sender);

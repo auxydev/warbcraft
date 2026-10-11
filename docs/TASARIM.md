@@ -50,9 +50,14 @@ Durum işaretleri: ✅ yapıldı (çekirdek + eklenti) · 🧪 çekirdekte hazı
 - ✅ Yaralılar ve günlük iyileşme.
 - ✅ Köy ve şehirlerden günlük gönüllü havuzuyla asker toplama (`/topla`). Düşman topraklarında
   toplanamaz.
-- 🔜 **Askerlerin dünyada oyuncuyu takip etmesi.** Yaklaşım: Citizens + Sentinel ya da kendi hafif
-  NPC'lerimiz. Bir oyuncu sahada en fazla N askerle görünür, gerisi "yedek" kalır. Komutlar: takip
-  et, burada tut, hücum, formasyon (kalkan duvarı, dağınık).
+- ✅ **Askerler dünyada oyuncuyu takip eder.** Ek eklenti yok; kendi hafif NPC'lerimiz (Husk,
+  kültür rengi ve kademeye göre zırh, süvari atlı, okçular ok atar). Sahada en fazla
+  `oyun.sahada-asker` asker görünür (en yüksek kademe önce), gerisi yedektir. Düşen asker %30
+  olasılıkla ölür, yoksa yaralanır; yerine yedekten biri çıkar. Öldürdükleri yaratık yığına
+  deneyim yazar. Emirler: takip et, burada bekle, hücum; formasyon: sıra, kol, dağınık
+  (`/parti emir|formasyon|saha`).
+- ✅ **Menüler:** Tüm sistemler sandık menüsüyle oynanır (`/menu` ya da "Sefer Defteri" kitabına sağ
+  tık). Menüler kuralları yeniden yazmaz, mevcut komutları çağırır; komutlar da çalışmaya devam eder.
 - 📋 Yoldaşlar: tavernadan kiralanan, isimli ve yetenekli NPC'ler.
 
 ### Savaş

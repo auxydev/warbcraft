@@ -1,10 +1,13 @@
 package dev.auxy.warbcraft.plugin.command;
 
+import dev.auxy.warbcraft.core.field.FieldFormation;
+import dev.auxy.warbcraft.core.field.FieldOrder;
 import dev.auxy.warbcraft.core.party.Party;
 import dev.auxy.warbcraft.core.party.TroopStack;
 import dev.auxy.warbcraft.core.troop.TroopType;
 import dev.auxy.warbcraft.plugin.Game;
 import dev.auxy.warbcraft.plugin.Msg;
+import dev.auxy.warbcraft.plugin.field.Retinue;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,11 +16,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/** /parti [terfi <birlik> <hedef> [adet] | terhis <birlik> <adet>] */
+/**
+ * /parti [terfi <birlik> <hedef> [adet] | terhis <birlik> <adet> | emir <takip|bekle|hucum>
+ * | formasyon [sira|kol|daginik] | saha]
+ */
 public final class PartyCommand extends BaseCommand {
 
-    public PartyCommand(Game game) {
+    private final Retinue retinue;
+
+    public PartyCommand(Game game, Retinue retinue) {
         super(game);
+        this.retinue = retinue;
     }
 
     @Override
@@ -52,7 +61,32 @@ public final class PartyCommand extends BaseCommand {
                 }
                 Msg.ok(player, removed + " " + Msg.esc(troop.name()) + " terhis edildi.");
             }
-            default -> throw new CommandError("Kullanım: /" + label + " [terfi|terhis]");
+            case "emir" -> {
+                String usage = "/" + label + " emir <takip|bekle|hucum>";
+                FieldOrder order = switch (arg(args, 1, usage).toLowerCase(Locale.ROOT)) {
+                    case "takip" -> FieldOrder.FOLLOW;
+                    case "bekle" -> FieldOrder.HOLD;
+                    case "hucum" -> FieldOrder.CHARGE;
+                    default -> throw new CommandError("Kullanım: " + usage);
+                };
+                retinue.setOrder(player, order);
+                Msg.ok(player, "Emir: <gold>" + order.displayName() + "</gold>");
+            }
+            case "formasyon" -> {
+                FieldFormation formation = args.length < 2 ? retinue.formation(player).next()
+                        : switch (args[1].toLowerCase(Locale.ROOT)) {
+                            case "sira" -> FieldFormation.LINE;
+                            case "kol" -> FieldFormation.COLUMN;
+                            case "daginik" -> FieldFormation.LOOSE;
+                            default -> throw new CommandError("Kullanım: /" + label + " formasyon [sira|kol|daginik]");
+                        };
+                retinue.setFormation(player, formation);
+                Msg.ok(player, "Formasyon: <gold>" + formation.displayName() + "</gold>");
+            }
+            case "saha" -> Msg.ok(player, retinue.toggleDeployed(player)
+                    ? "Askerlerin sahada, seni takip ediyor."
+                    : "Askerlerin geri çekildi (yedekte bekliyorlar).");
+            default -> throw new CommandError("Kullanım: /" + label + " [terfi|terhis|emir|formasyon|saha]");
         }
     }
 
@@ -86,7 +120,13 @@ public final class PartyCommand extends BaseCommand {
         }
         Party party = game.profile(player).party();
         if (args.length == 1) {
-            return complete(List.of("terfi", "terhis"), args[0]);
+            return complete(List.of("terfi", "terhis", "emir", "formasyon", "saha"), args[0]);
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("emir")) {
+            return complete(List.of("takip", "bekle", "hucum"), args[1]);
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("formasyon")) {
+            return complete(List.of("sira", "kol", "daginik"), args[1]);
         }
         if (args.length == 2) {
             return complete(party.roster().keySet(), args[1]);
