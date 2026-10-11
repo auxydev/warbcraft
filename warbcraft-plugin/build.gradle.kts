@@ -1,5 +1,5 @@
 plugins {
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 dependencies {
@@ -34,8 +34,8 @@ tasks.runServer {
     jvmArgs("-Dwarbcraft.deneme=true", "-Dfile.encoding=UTF-8", "-Xms1G", "-Xmx2G")
     // Her surumden istemci baglanabilsin.
     downloadPlugins {
-        url("https://github.com/ViaVersion/ViaVersion/releases/download/5.1.1/ViaVersion-5.1.1.jar")
-        url("https://github.com/ViaVersion/ViaBackwards/releases/download/5.1.1/ViaBackwards-5.1.1.jar")
-        url("https://github.com/ViaVersion/ViaRewind/releases/download/4.0.4/ViaRewind-4.0.4.jar")
+        url("https://github.com/ViaVersion/ViaVersion/releases/download/5.12.1/ViaVersion-5.12.1.jar")
+        url("https://github.com/ViaVersion/ViaBackwards/releases/download/5.12.1/ViaBackwards-5.12.1.jar")
+        url("https://github.com/ViaVersion/ViaRewind/releases/download/4.2.0/ViaRewind-4.2.0.jar")
     }
 }

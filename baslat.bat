@@ -34,7 +34,7 @@ echo  Sunucu acilinca Minecraft'ta Cok Oyunculu ^> Dogrudan Baglan ^> localhost
 echo  Yonetici olmak icin bu pencereye:  op OYUNCU_ADIN
 echo  Kapatmak icin bu pencereye:        stop
 echo.
-call gradlew.bat :warbcraft-plugin:runServer
+call "%~dp0gradlew.bat" :warbcraft-plugin:runServer
 pause
 exit /b 0
 
