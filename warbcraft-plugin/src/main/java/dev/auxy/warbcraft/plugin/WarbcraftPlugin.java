@@ -1,5 +1,6 @@
 package dev.auxy.warbcraft.plugin;
 
+import dev.auxy.warbcraft.core.faction.Settlement;
 import dev.auxy.warbcraft.plugin.command.AdminCommand;
 import dev.auxy.warbcraft.plugin.command.ClanCommand;
 import dev.auxy.warbcraft.plugin.command.DenarCommand;
@@ -24,6 +25,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -33,6 +39,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
     private static final String WORLD_FILE = "dunya.yml";
     private static final String STATE_FILE = "durum.yml";
     private static final long AUTOSAVE_TICKS = 5 * 60 * 20L;
+    /** {@code -Dwarbcraft.deneme=true}: yerel deneme sunucusu (gradlew runServer). */
+    private static final boolean TEST_MODE = Boolean.getBoolean("warbcraft.deneme");
+    private static final int TEST_SITE_SPACING = 120;
 
     private Game game;
 
@@ -42,6 +51,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
         saveResourceIfMissing(TROOPS_FILE);
         saveResourceIfMissing(WORLD_FILE);
 
+        if (TEST_MODE) {
+            applyTestConfig();
+        }
         GameData data;
         try {
             data = DataLoader.load(getConfig(), dataFile(TROOPS_FILE), dataFile(WORLD_FILE));
@@ -56,6 +68,9 @@ public final class WarbcraftPlugin extends JavaPlugin {
                 data.settings().startingDenars(), getLogger());
         game = new Game(data, players);
         StateStore.load(game, dataFile(STATE_FILE));
+        if (TEST_MODE) {
+            placeSettlementsNearSpawn(data);
+        }
 
         Bandits bandits = new Bandits(this);
         register("parti", new PartyCommand(game));
@@ -115,6 +130,38 @@ public final class WarbcraftPlugin extends JavaPlugin {
             yaml.save(file);
         } catch (IOException e) {
             getLogger().log(Level.SEVERE, WORLD_FILE + " kaydedilemedi", e);
+        }
+    }
+
+    /**
+     * Deneme modu: sezon dun baslamis ve hazirliksiz, savas penceresi her gun acik, bol para.
+     * Yalnizca bellekteki ayarlari degistirir; config.yml dosyasina yazilmaz.
+     */
+    private void applyTestConfig() {
+        ZoneId zone = ZoneId.of(getConfig().getString("sezon.saat-dilimi", "Europe/Istanbul"));
+        getConfig().set("sezon.baslangic", LocalDateTime.now(zone).minusDays(1).truncatedTo(ChronoUnit.MINUTES).toString());
+        getConfig().set("sezon.hazirlik-gun", 0);
+        getConfig().set("sezon.kusatma-ihbar-saat", 0);
+        getConfig().set("sezon.savas-pencereleri", List.of(Map.of(
+                "gunler", List.of("pazartesi", "sali", "carsamba", "persembe", "cuma", "cumartesi", "pazar"),
+                "baslangic", "00:00",
+                "bitis", "23:59")));
+        getConfig().set("oyun.baslangic-dinar", 10_000);
+        getConfig().set("oyun.gun-uzunlugu-dakika", 10);
+        getLogger().warning("DENEME MODU: sezon başlamış, savaş penceresi hep açık, başlangıç parası 10000.");
+    }
+
+    /** Deneme modu: tum yerlesimleri spawn cevresine 5 sutunluk bir izgaraya dizer (dosyaya yazmaz). */
+    private void placeSettlementsNearSpawn(GameData data) {
+        Location spawn = getServer().getWorlds().getFirst().getSpawnLocation();
+        String world = Objects.requireNonNull(spawn.getWorld(), "world").getName();
+        int index = 0;
+        for (Settlement settlement : data.realm().settlements()) {
+            int x = spawn.getBlockX() + (index % 5) * TEST_SITE_SPACING;
+            int z = spawn.getBlockZ() + (index / 5) * TEST_SITE_SPACING;
+            data.sites().put(settlement.id(), new SettlementSite(settlement.id(), world, x, spawn.getBlockY(), z, 50));
+            getLogger().info("Deneme konumu: " + settlement.name() + " -> " + x + ", " + z);
+            index++;
         }
     }
 

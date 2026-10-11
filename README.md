@@ -9,6 +9,21 @@ asker topla, ün kazan, klanını kur, bir krala bağlan ya da kendi krallığı
 
 Ayrıntılar: [docs/TASARIM.md](docs/TASARIM.md) · Sunucu kurulumu: [docs/SUNUCU.md](docs/SUNUCU.md)
 
+## Hızlı başlangıç (kendi bilgisayarında dene)
+
+**Windows:** depoyu indir ([Code → Download ZIP](https://github.com/auxydev/warbcraft/archive/refs/heads/main.zip)
+ya da `git clone`) ve **`baslat.bat`** dosyasına çift tıkla. Java 21 yoksa betik onu da kurar.
+**macOS/Linux:** `./baslat.sh`
+
+Sunucu açılınca Minecraft'ta **Çok Oyunculu → Doğrudan Bağlan → `localhost`**. ViaVersion, ViaBackwards
+ve ViaRewind otomatik kurulduğu için hemen her sürümle girebilirsin. Konsola `op <oyuncu_adın>` yaz.
+
+Deneme modu (yalnızca bu yerel sunucuda):
+- Sezon başlamış durumda, savaş penceresi her an açık, kuşatma ihbarı yok.
+- Başlangıç parası 10000 dinar, bir oyun günü 10 dakika.
+- Bütün yerleşimler spawn çevresinde 120 blok aralıklı bir ızgarada. Valdheim tam spawn'da, yani
+  girer girmez `/topla`, `/pazar` ve `/gorev pano` komutlarını deneyebilirsin.
+
 ## Yapı
 
 | Klasör | İçerik |

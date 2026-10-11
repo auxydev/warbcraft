@@ -30,4 +30,12 @@ tasks.jar {
 
 tasks.runServer {
     minecraftVersion("1.21.1")
+    // Yerel deneme: sezon acik, yerlesimler spawn cevresinde (WarbcraftPlugin.TEST_MODE).
+    jvmArgs("-Dwarbcraft.deneme=true", "-Dfile.encoding=UTF-8", "-Xms1G", "-Xmx2G")
+    // Her surumden istemci baglanabilsin.
+    downloadPlugins {
+        url("https://github.com/ViaVersion/ViaVersion/releases/download/5.1.1/ViaVersion-5.1.1.jar")
+        url("https://github.com/ViaVersion/ViaBackwards/releases/download/5.1.1/ViaBackwards-5.1.1.jar")
+        url("https://github.com/ViaVersion/ViaRewind/releases/download/4.0.4/ViaRewind-4.0.4.jar")
+    }
 }
